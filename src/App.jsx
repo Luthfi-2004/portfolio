@@ -16,6 +16,8 @@ const projects = [
     tags: ["React", "Express.js", "Python", "Flask", "ML"],
     accent: "#38bdf8",
     accentDim: "rgba(56,189,248,0.12)",
+    image: null,
+    demo: null,
     shortDesc: "Predicts employee burnout risk using machine learning.",
     longDesc: "A full-stack application with a React/Express.js frontend and a Python/Flask ML backend. The system ingests HR metrics — workload, tenure, satisfaction scores — and runs a trained predictive model to evaluate individual burnout probability. Features a real-time dashboard with risk segmentation, actionable HR insights, and exportable reports.",
     highlights: ["70%+ prediction accuracy", "REST API integration", "Real-time risk dashboard", "Exportable PDF reports"],
@@ -27,6 +29,8 @@ const projects = [
     tags: ["Laravel", "MySQL", "PHP", "Livewire"],
     accent: "#34d399",
     accentDim: "rgba(52,211,153,0.12)",
+    image: null,
+    demo: null,
     shortDesc: "Industrial sand operational system for factory digitalization.",
     longDesc: "A web-based factory operational system built with Laravel and MySQL for a manufacturing environment. Digitalized the entire sand quality reporting workflow — replacing paper logs with structured data capture, real-time analytics, and automated reporting.",
     highlights: ["Paper-to-digital transformation", "Real-time analytics", "Laravel + Livewire stack", "MySQL optimization"],
@@ -38,6 +42,8 @@ const projects = [
     tags: ["React", "Full-Stack", "Innovation"],
     accent: "#f59e0b",
     accentDim: "rgba(245,158,11,0.12)",
+    image: "https://staypath-ai-project.vercel.app/og-image.png",
+    demo: "https://staypath-ai-project.vercel.app/",
     shortDesc: "1st Place — Technovision 2025 Innovation Beyond Code.",
     longDesc: "Resdigaza captured first place at Technovision 2025, the flagship innovation competition themed Innovation Beyond Code. This project exemplified the fusion of social impact and technical excellence — built with a modern full-stack architecture and designed for real-world deployment.",
     highlights: ["1st Place — Technovision 2025", "Innovation Beyond Code theme", "Social impact focus", "Production-ready architecture"],
@@ -111,6 +117,7 @@ function useTyping(texts, speed = 75, pause = 2000) {
   const [idx, setIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
   const [deleting, setDeleting] = useState(false);
+  
   useEffect(() => {
     const current = texts[idx];
     const t = setTimeout(() => {
@@ -126,6 +133,7 @@ function useTyping(texts, speed = 75, pause = 2000) {
     }, deleting ? speed / 2 : speed);
     return () => clearTimeout(t);
   }, [charIdx, deleting, idx, texts, speed, pause]);
+  
   return display;
 }
 
@@ -144,6 +152,7 @@ function TiltCard({ children, className = "", onClick }) {
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
+  
   const handleMouseLeave = () => { x.set(0); y.set(0); };
 
   return (
@@ -223,24 +232,52 @@ function Modal({ item, type, onClose }) {
 
           {/* Body */}
           <div className="px-5 sm:px-6 pb-2 space-y-4">
+
+            {/* Preview image */}
+            {type === "project" && item.image && (
+              <div className="rounded-xl overflow-hidden border border-white/8">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full object-cover"
+                  style={{ maxHeight: 180 }}
+                  onError={(e) => { e.target.style.display = "none"; }}
+                />
+              </div>
+            )}
+
+            {/* Live demo iframe preview */}
+            {type === "project" && item.demo && !item.image && (
+              <div className="rounded-xl overflow-hidden border border-white/8" style={{ height: 180 }}>
+                <iframe
+                  src={item.demo}
+                  title={item.title}
+                  className="w-full h-full"
+                  style={{ pointerEvents: "none", transform: "scale(0.8)", transformOrigin: "top left", width: "125%", height: "125%" }}
+                />
+              </div>
+            )}
+
             <p className="text-white/60 text-sm leading-relaxed">{type === "project" ? item.longDesc : item.desc}</p>
+
             {type === "project" && (
               <div>
                 <p className="text-xs font-mono text-white/30 uppercase tracking-widest mb-3">Key Highlights</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {item.highlights.map((h, i) => (
                     <div key={i} className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-white/60">
-                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: accent }} />
+                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.accent }} />
                       {h}
                     </div>
                   ))}
                 </div>
               </div>
             )}
+
             {type === "cert" && (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/8">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
-                  style={{ background: `${accent}15`, border: `1px solid ${accent}30`, color: accent }}>
+                  style={{ background: `${item.accent}15`, border: `1px solid ${item.accent}30`, color: item.accent }}>
                   {item.badge}
                 </div>
                 <div>
@@ -249,9 +286,22 @@ function Modal({ item, type, onClose }) {
                 </div>
               </div>
             )}
+
           </div>
 
-          <div className="p-5 sm:p-6 pt-4">
+          <div className="p-5 sm:p-6 pt-4 space-y-2">
+            {type === "project" && item.demo && (
+              <a
+                href={item.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
+                style={{ background: `linear-gradient(135deg, ${item.accent}CC, ${item.accent}88)`, color: "#fff" }}
+              >
+                <ExternalLink size={14} />
+                Live Demo
+              </a>
+            )}
             <button onClick={onClose} className="w-full py-2.5 rounded-xl border border-white/8 text-sm text-white/40 hover:text-white hover:border-white/15 hover:bg-white/5 transition-all font-mono">
               Close
             </button>
@@ -296,11 +346,13 @@ function SectionLabel({ icon: Icon, label, accent = "#38bdf8" }) {
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
+  
   const scroll = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
 
   return (
@@ -430,10 +482,10 @@ function Hero() {
 
         {/* Name */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }}>
-<h1 className="font-black tracking-tight leading-none text-white text-4xl sm:text-6xl mb-1">
-  Luthfi
-</h1>
-<h1 className="font-black tracking-tight leading-none text-4xl sm:text-6xl mb-2"
+          <h1 className="font-black tracking-tight leading-none text-white text-4xl sm:text-6xl mb-1">
+            Luthfi
+          </h1>
+          <h1 className="font-black tracking-tight leading-none text-4xl sm:text-6xl mb-2"
             style={{ background: "linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #a78bfa 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             Rafananda
           </h1>
