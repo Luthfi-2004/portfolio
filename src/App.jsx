@@ -17,7 +17,7 @@ const projects = [
     accent: "#38bdf8",
     accentDim: "rgba(56,189,248,0.12)",
     image: null,
-    demo: null,
+    demo: "https://staypath-ai-project.vercel.app/",
     shortDesc: "Predicts employee burnout risk using machine learning.",
     longDesc: "A full-stack application with a React/Express.js frontend and a Python/Flask ML backend. The system ingests HR metrics — workload, tenure, satisfaction scores — and runs a trained predictive model to evaluate individual burnout probability. Features a real-time dashboard with risk segmentation, actionable HR insights, and exportable reports.",
     highlights: ["70%+ prediction accuracy", "REST API integration", "Real-time risk dashboard", "Exportable PDF reports"],
@@ -42,8 +42,8 @@ const projects = [
     tags: ["React", "Full-Stack", "Innovation"],
     accent: "#f59e0b",
     accentDim: "rgba(245,158,11,0.12)",
-    image: "https://staypath-ai-project.vercel.app/og-image.png",
-    demo: "https://staypath-ai-project.vercel.app/",
+    image: null,
+    demo: null,
     shortDesc: "1st Place — Technovision 2025 Innovation Beyond Code.",
     longDesc: "Resdigaza captured first place at Technovision 2025, the flagship innovation competition themed Innovation Beyond Code. This project exemplified the fusion of social impact and technical excellence — built with a modern full-stack architecture and designed for real-world deployment.",
     highlights: ["1st Place — Technovision 2025", "Innovation Beyond Code theme", "Social impact focus", "Production-ready architecture"],
@@ -290,18 +290,31 @@ function Modal({ item, type, onClose }) {
           </div>
 
           <div className="p-5 sm:p-6 pt-4 space-y-2">
-            {type === "project" && item.demo && (
-              <a
-                href={item.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
-                style={{ background: `linear-gradient(135deg, ${item.accent}CC, ${item.accent}88)`, color: "#fff" }}
-              >
-                <ExternalLink size={14} />
-                Live Demo
-              </a>
+            {type === "project" && (
+              item.demo ? (
+                /* Tombol nyala kalau ada link demo */
+                <a
+                  href={item.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all hover:opacity-90"
+                  style={{ background: `linear-gradient(135deg, ${item.accent}CC, ${item.accent}88)`, color: "#fff" }}
+                >
+                  <ExternalLink size={14} />
+                  Live Demo
+                </a>
+              ) : (
+                /* Tombol mati (disabled) kalau demo null */
+                <button
+                  disabled
+                  className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 cursor-not-allowed border border-white/5 bg-white/[0.02] text-white/20"
+                >
+                  <ExternalLink size={14} />
+                  Demo Not Available
+                </button>
+              )
             )}
+            
             <button onClick={onClose} className="w-full py-2.5 rounded-xl border border-white/8 text-sm text-white/40 hover:text-white hover:border-white/15 hover:bg-white/5 transition-all font-mono">
               Close
             </button>
