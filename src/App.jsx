@@ -741,7 +741,6 @@ function Footer() {
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white mb-3 tracking-tight">Get In Touch</h2>
           <p className="text-white/30 text-sm font-mono mb-10 max-w-sm mx-auto leading-relaxed">
-            Targeting AI Driver Assistance System Development Intern at Toyota.
             Open to collaborations & freelance.
           </p>
 
