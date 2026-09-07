@@ -868,9 +868,9 @@ function Footer() {
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             {[
-              { href: "https://github.com/Luthfi-2004", icon: GitBranch, label: "GITHUB_PROFILE", accent: "#ffffff" },
-              { href: "https://www.linkedin.com/in/luthfirafanandanaufal/", icon: Linkedin, label: "LINKEDIN_NETWORK", accent: "#00f0ff" },
-              { href: "mailto:luthfi.rafanandanaufal@gmail.com", icon: Mail, label: "SECURE_EMAIL", accent: "#ff003c" },
+              { href: "https://github.com/Luthfi-2004", icon: GitBranch, label: "GITHUB", accent: "#ffffff" },
+              { href: "https://www.linkedin.com/in/luthfirafanandanaufal/", icon: Linkedin, label: "LINKEDIN", accent: "#00f0ff" },
+              { href: "mailto:luthfi.rafanandanaufal@gmail.com", icon: Mail, label: "EMAIL", accent: "#ff003c" },
             ].map(({ href, icon: Icon, label, accent }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                 className="interactive flex items-center justify-center gap-3 px-6 py-4 rounded-sm text-xs font-bold font-sans uppercase tracking-widest border border-white/10 bg-white/5 transition-all overflow-hidden relative group hover:scale-[1.02] active:scale-[0.98]">
