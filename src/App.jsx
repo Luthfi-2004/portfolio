@@ -627,10 +627,7 @@ function Hero() {
     <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center px-4 text-center z-10 pt-20">
       <div className="relative max-w-4xl w-full flex flex-col items-center">
         
-        <div className="hero-element opacity-0 inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-10 border border-[#00f0ff]/30 bg-[#00f0ff]/5 backdrop-blur-md">
-          <div className="w-2 h-2 bg-[#00f0ff] rounded-sm animate-pulse" />
-          <span className="text-[#00f0ff]">Active // Ready for Deploy</span>
-        </div>
+
 
         <div className="hero-element opacity-0">
           <h1 className="font-black tracking-tighter leading-none text-white text-5xl sm:text-7xl md:text-8xl mb-2 font-sans uppercase">
