@@ -117,70 +117,6 @@ const education = [
   }
 ];
 
-// ─── CUSTOM CURSOR ────────────────────────────────────────────────────────────
-
-function CustomCursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  
-  useEffect(() => {
-    let cursorX = 0;
-    let cursorY = 0;
-    let ringX = 0;
-    let ringY = 0;
-    let isHovering = false;
-    let requestRef;
-
-    const onMouseMove = (e) => {
-      cursorX = e.clientX;
-      cursorY = e.clientY;
-    };
-
-    const onMouseOver = (e) => {
-      if (e.target.closest('button, a, .interactive')) {
-        if (!isHovering) {
-          isHovering = true;
-          animate(dotRef.current, { scale: 1.5, duration: 200, easing: 'easeOutSine' });
-          animate(ringRef.current, { scale: 1.5, opacity: 0.8, duration: 200, easing: 'easeOutSine' });
-        }
-      } else {
-        if (isHovering) {
-          isHovering = false;
-          animate(dotRef.current, { scale: 1, duration: 200, easing: 'easeOutSine' });
-          animate(ringRef.current, { scale: 1, opacity: 0.4, duration: 200, easing: 'easeOutSine' });
-        }
-      }
-    };
-
-    const loop = () => {
-      ringX += (cursorX - ringX) * 0.2;
-      ringY += (cursorY - ringY) * 0.2;
-
-      if (dotRef.current && ringRef.current) {
-        dotRef.current.style.transform = `translate(${cursorX - 8}px, ${cursorY - 8}px) scale(${isHovering ? 1.5 : 1})`;
-        ringRef.current.style.transform = `translate(${ringX - 24}px, ${ringY - 24}px) scale(${isHovering ? 1.5 : 1})`;
-      }
-      requestRef = requestAnimationFrame(loop);
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseover", onMouseOver);
-    requestRef = requestAnimationFrame(loop);
-
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseover", onMouseOver);
-      cancelAnimationFrame(requestRef);
-    };
-  }, []);
-
-  return (
-    <>
-      <div ref={dotRef} className="fixed top-0 left-0 w-4 h-4 bg-[#00f0ff] rounded-full pointer-events-none z-[100] mix-blend-screen" />
-      <div ref={ringRef} className="fixed top-0 left-0 w-12 h-12 border border-[#00f0ff] rounded-full pointer-events-none z-[99] opacity-40" />
-    </>
-  );
-}
 
 // ─── TYPING HOOK ──────────────────────────────────────────────────────────────
 
@@ -255,7 +191,7 @@ function TiltCard({ children, className = "", onClick }) {
       onMouseUp={handleMouseUp}
       onClick={onClick}
       style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-      className={`cursor-none interactive relative ${className}`}
+      className={`interactive relative ${className}`}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity rounded-inherit" style={{ transform: "translateZ(1px)" }} />
       {children}
@@ -498,7 +434,7 @@ function Navbar() {
         style={scrolled ? { background: "rgba(10,10,15,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(0,240,255,0.1)" } : { padding: "10px 0" }}
       >
         <div className="max-w-6xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 interactive cursor-none" onClick={() => window.scrollTo(0, 0)}>
+          <div className="flex items-center gap-3 interactive" onClick={() => window.scrollTo(0, 0)}>
             <div className="relative flex items-center justify-center w-10 h-10">
               <div className="absolute inset-0 bg-[#00f0ff] blur-md opacity-40 rounded-full animate-pulse" />
               <div className="relative w-full h-full bg-[#0a0a0f] border border-[#00f0ff]/50 rounded-xl flex items-center justify-center transform rotate-45 hover:rotate-90 transition-transform duration-500">
@@ -689,7 +625,7 @@ function Hero() {
         </div>
       </div>
       
-      <div className="hero-element opacity-0 absolute bottom-10 left-1/2 -translate-x-1/2 text-[#00f0ff]/50 flex flex-col items-center gap-2 cursor-none">
+      <div className="hero-element opacity-0 absolute bottom-10 left-1/2 -translate-x-1/2 text-[#00f0ff]/50 flex flex-col items-center gap-2">
         <span className="text-[10px] font-mono tracking-widest">SCROLL_DOWN</span>
         <div className="scroll-arrow">
           <ChevronDown size={20} />
@@ -847,7 +783,7 @@ function Skills() {
             <div className="flex flex-wrap gap-2.5">
               {group.items.map((item, j) => (
                 <span key={item}
-                  className="interactive px-3 py-1.5 rounded-sm text-xs font-mono border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all cursor-none uppercase tracking-wide"
+                  className="interactive px-3 py-1.5 rounded-sm text-xs font-mono border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all uppercase tracking-wide"
                   style={{
                     ':hover': { borderColor: group.accent, backgroundColor: `${group.accent}10`, color: group.accent, transform: 'translateY(-2px)' }
                   }}>
@@ -969,7 +905,7 @@ export default function App() {
     <>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
       <style>{`
-        * { box-sizing: border-box; cursor: none !important; }
+        * { box-sizing: border-box; }
         html { scroll-behavior: smooth; background: #06080e; }
         body { margin: 0; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 6px; }
@@ -980,8 +916,6 @@ export default function App() {
         p, span, div { font-family: 'JetBrains Mono', monospace; }
         ::selection { background: rgba(0,240,255,0.3); color: white; }
       `}</style>
-      
-      <CustomCursor />
       
       <div className="min-h-screen text-white relative selection:bg-[#00f0ff]/30 selection:text-white">
         <CyberBackground />
