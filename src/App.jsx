@@ -412,14 +412,15 @@ function Modal({ item, type, onClose }) {
 }
 
 // SCROLL ANIMATION HOOK
-function useScrollAnimation(ref, animationOptions) {
+function useScrollAnimation(ref, animationOptions, childSelector = null) {
   useEffect(() => {
     if (!ref.current) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            animate(entry.target, animationOptions);
+            const targets = childSelector ? entry.target.querySelectorAll(childSelector) : entry.target;
+            animate(targets, animationOptions);
             observer.unobserve(entry.target);
           }
         });
@@ -428,7 +429,7 @@ function useScrollAnimation(ref, animationOptions) {
     );
     observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [ref, animationOptions]);
+  }, [ref, animationOptions, childSelector]);
 }
 
 // ─── SECTION ──────────────────────────────────────────────────────────────────
@@ -707,7 +708,7 @@ function Experience() {
     opacity: [0, 1],
     delay: stagger(150),
     easing: 'easeOutQuart'
-  });
+  }, '.stagger-item');
 
   return (
     <Section id="experience">
@@ -718,7 +719,7 @@ function Experience() {
         
         <div className="space-y-12">
           {experience.map((exp, i) => (
-            <div key={i} className="relative pl-14 sm:pl-20 opacity-0">
+            <div key={i} className="stagger-item relative pl-14 sm:pl-20 opacity-0">
               {/* Glowing Node */}
               <div className="absolute left-[9px] sm:left-[16px] top-6 w-6 h-6 rounded-sm bg-[#0a0a0f] border-2 flex items-center justify-center z-10 rotate-45"
                 style={{ borderColor: exp.accent, boxShadow: `0 0 15px ${exp.accent}60` }}>
@@ -767,14 +768,14 @@ function Projects({ onOpen }) {
     opacity: [0, 1],
     delay: stagger(100),
     easing: 'easeOutQuart'
-  });
+  }, '.stagger-item');
 
   return (
     <Section id="projects">
       <SectionLabel icon={Layers} label="Deployed Modules" accent="#00f0ff" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ref={gridRef}>
         {projects.map((proj, i) => (
-          <div key={proj.id} className="opacity-0">
+          <div key={proj.id} className="stagger-item opacity-0">
             <TiltCard onClick={() => onOpen(proj, "project")}
               className="h-full group">
               <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden flex flex-col transition-colors group-hover:border-white/30"
@@ -825,14 +826,14 @@ function Skills() {
     opacity: [0, 1],
     delay: stagger(150),
     easing: 'easeOutQuad'
-  });
+  }, '.stagger-item');
 
   return (
     <Section id="skills">
       <SectionLabel icon={Cpu} label="System Capabilities" accent="#7000ff" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6" ref={skillsRef}>
         {skills.map((group, i) => (
-          <div key={group.label} className="opacity-0 p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden group">
+          <div key={group.label} className="stagger-item opacity-0 p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden group">
             
             <div className="absolute bottom-0 left-0 w-full h-1 transition-all duration-300 opacity-50 group-hover:opacity-100" style={{ background: group.accent }} />
 
@@ -870,14 +871,14 @@ function Education({ onOpen }) {
     opacity: [0, 1],
     delay: stagger(150),
     easing: 'easeOutQuad'
-  });
+  }, '.stagger-item');
 
   return (
     <Section id="education">
       <SectionLabel icon={Brain} label="Education & Core Data" accent="#00f0ff" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6" ref={eduRef}>
         {education.map((edu, i) => (
-          <div key={i} className="opacity-0">
+          <div key={i} className="stagger-item opacity-0">
             <TiltCard onClick={() => onOpen(edu, "edu")}
               className="h-full group">
               <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden transition-all group-hover:border-white/30">
@@ -918,8 +919,8 @@ function Footer() {
       <div className="absolute inset-0 pointer-events-none opacity-20"
         style={{ backgroundImage: "radial-gradient(circle at center, #00f0ff 0%, transparent 50%)", backgroundSize: "100% 100%" }} />
       
-      <div className="max-w-4xl mx-auto text-center relative z-10" ref={footRef}>
-        <div className="opacity-0">
+      <div className="max-w-4xl mx-auto text-center relative z-10 opacity-0" ref={footRef}>
+        <div>
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-8 border border-[#7000ff]/40 bg-[#7000ff]/10 text-[#7000ff]">
             <Sparkles size={14} className="animate-pulse" />
             Initialization Complete
