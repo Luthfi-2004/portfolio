@@ -3,7 +3,8 @@ import { motion, AnimatePresence, useInView, useMotionValue, useSpring, useTrans
 import {
   GitBranch, Linkedin, Mail, X, ExternalLink, ChevronDown,
   Cpu, Code2, Award, Briefcase, Sparkles, ArrowRight,
-  Terminal, Zap, Brain, Server, Shield, Layers
+  Terminal, Zap, Brain, Server, Shield, Layers, Database,
+  Eye, Activity, Fingerprint, MonitorSmartphone, Wifi, Rocket, Hexagon
 } from "lucide-react";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -11,104 +12,162 @@ import {
 const projects = [
   {
     id: 1,
-    title: "AI HR Burnout Predictor",
+    title: "AI HR Burnout Predictor (StayPath AI)",
     emoji: "🧠",
     tags: ["React", "Express.js", "Python", "Flask", "ML"],
-    accent: "#38bdf8",
-    accentDim: "rgba(56,189,248,0.12)",
+    accent: "#00f0ff", // Cyberpunk Cyan
+    accentDim: "rgba(0, 240, 255, 0.12)",
     image: null,
     demo: "https://staypath-ai-project.vercel.app/",
     shortDesc: "Predicts employee burnout risk using machine learning.",
-    longDesc: "A full-stack application with a React/Express.js frontend and a Python/Flask ML backend. The system ingests HR metrics — workload, tenure, satisfaction scores — and runs a trained predictive model to evaluate individual burnout probability. Features a real-time dashboard with risk segmentation, actionable HR insights, and exportable reports.",
-    highlights: ["70%+ prediction accuracy", "REST API integration", "Real-time risk dashboard", "Exportable PDF reports"],
+    longDesc: "A full-stack HR management application utilizing Artificial Intelligence and Machine Learning to evaluate and predict employee burnout levels. Integrating a React.js/Express.js frontend with a Python (Flask) backend for ML predictive models.",
+    highlights: ["Machine Learning predictive models", "Full-stack React/Flask integration", "Real-time risk evaluation", "Actionable HR insights"],
   },
   {
     id: 2,
-    title: "Greensand Reporting",
+    title: "Greensand Reporting App",
     emoji: "🏭",
-    tags: ["Laravel", "MySQL", "PHP", "Livewire"],
-    accent: "#34d399",
-    accentDim: "rgba(52,211,153,0.12)",
+    tags: ["Laravel", "CodeIgniter", "MySQL", "PHP"],
+    accent: "#ff003c", // Cyberpunk Red
+    accentDim: "rgba(255, 0, 60, 0.12)",
     image: null,
     demo: null,
-    shortDesc: "Industrial sand operational system for factory digitalization.",
-    longDesc: "A web-based factory operational system built with Laravel and MySQL for a manufacturing environment. Digitalized the entire sand quality reporting workflow — replacing paper logs with structured data capture, real-time analytics, and automated reporting.",
-    highlights: ["Paper-to-digital transformation", "Real-time analytics", "Laravel + Livewire stack", "MySQL optimization"],
+    shortDesc: "Industrial sand operational data reporting system.",
+    longDesc: "Architected a web-based industrial data reporting application to streamline operational flows in a factory environment. Digitalized the entire reporting workflow — replacing paper logs with structured data capture, real-time analytics, and automated reporting.",
+    highlights: ["Paper-to-digital transformation", "Streamlined operational flows", "Laravel + CodeIgniter architecture", "MySQL database optimization"],
   },
   {
     id: 3,
-    title: "Resdigaza",
+    title: "Resdigaza - Technovision 2025",
     emoji: "🏆",
-    tags: ["React", "Full-Stack", "Innovation"],
-    accent: "#f59e0b",
-    accentDim: "rgba(245,158,11,0.12)",
+    tags: ["Software Innovation", "Full-Stack"],
+    accent: "#7000ff", // Cyberpunk Purple
+    accentDim: "rgba(112, 0, 255, 0.12)",
     image: null,
     demo: null,
-    shortDesc: "1st Place — Technovision 2025 Innovation Beyond Code.",
-    longDesc: "Resdigaza captured first place at Technovision 2025, the flagship innovation competition themed Innovation Beyond Code. This project exemplified the fusion of social impact and technical excellence — built with a modern full-stack architecture and designed for real-world deployment.",
-    highlights: ["1st Place — Technovision 2025", "Innovation Beyond Code theme", "Social impact focus", "Production-ready architecture"],
-  },
-];
-
-const certifications = [
-  {
-    id: 1,
-    title: "Fundamental Back-End with JavaScript",
-    issuer: "Dicoding",
-    badge: "AWS",
-    accent: "#38bdf8",
-    desc: "Advanced back-end development curriculum validated by Amazon Web Services. Covers Node.js server architecture, RESTful APIs, authentication, and cloud deployment on AWS infrastructure.",
-  },
-  {
-    id: 2,
-    title: "Beginner Back-End with JavaScript",
-    issuer: "Dicoding",
-    badge: "JS",
-    accent: "#a78bfa",
-    desc: "Foundational back-end engineering with Node.js and Hapi.js. Covers HTTP fundamentals, routing, request handling, and server-side data management.",
-  },
-  {
-    id: 3,
-    title: "Fundamental Web App with React",
-    issuer: "Dicoding",
-    badge: "R",
-    accent: "#34d399",
-    desc: "Comprehensive React.js curriculum covering component architecture, hooks, state management, routing, and building production-grade single-page applications.",
+    shortDesc: "1st Place Winner — Innovation Beyond Code.",
+    longDesc: "Won 1st Place at Technovision 2025 (Resdigaza) in the 'Innovation Beyond Code' competition for software development innovation. Demonstrated exceptional problem-solving and full-stack capabilities.",
+    highlights: ["1st Place Winner", "Software Development Innovation", "High-impact solution architecture", "Proven competitive programming skills"],
   },
 ];
 
 const skills = [
-  { label: "AI & ML", icon: Brain, items: ["Python", "Flask", "Machine Learning", "Predictive Modeling", "Scikit-learn"], accent: "#38bdf8" },
-  { label: "Full-Stack", icon: Code2, items: ["React.js", "Express.js", "PHP", "Laravel", "Livewire", "Tailwind CSS"], accent: "#a78bfa" },
-  { label: "Infrastructure", icon: Server, items: ["MySQL", "REST APIs", "AWS", "Git", "Linux", "Docker"], accent: "#34d399" },
+  { label: "AI & Computer Vision", icon: Eye, items: ["Python", "YOLO", "OpenCV", "MediaPipe", "Flask", "Machine Learning Integration"], accent: "#00f0ff" },
+  { label: "Full-Stack Development", icon: Code2, items: ["PHP", "Laravel", "CodeIgniter", "JavaScript", "React.js", "Express.js", "Golang", "C/C++ (Basic)"], accent: "#ff003c" },
+  { label: "Infrastructure & Data", icon: Database, items: ["MySQL", "PostgreSQL", "Git & GitHub", "REST API", "Basic ERP Understanding", "Basic Networking (MikroTik)"], accent: "#7000ff" },
 ];
 
 const experience = [
   {
-    role: "IT Programmer Intern",
-    company: "PT Asian Isuzu Casting Center",
-    period: "Aug 2025 – Jan 2026",
-    icon: "🏗️",
-    accent: "#38bdf8",
+    role: "IT Quality Assurance Engineer",
+    company: "PT Inti Ganda Perdana",
+    period: "Aug 2026 – Present",
+    icon: <Activity size={12} />,
+    accent: "#00f0ff",
     points: [
-      "Developed PHP/MySQL QC & Traceability system, reducing human error by 70%.",
-      "Integrated production data pipelines for ERP architecture compatibility.",
-      "Designed factory-floor data capture workflows replacing legacy paper systems.",
+      "Worked on the development of an AI-based monitoring system using computer vision and machine learning to support quality control activities.",
+      "Collected and prepared data, developed and tested AI models, and improved real-time detection performance.",
+      "Integrated the AI system into a web-based monitoring dashboard and optimized it to run efficiently with clear detection results.",
+      "Gained hands-on experience with Python, YOLO, OpenCV, MediaPipe, and Flask while applying AI technology to real-world industrial needs."
     ],
   },
   {
-    role: "Freelance Full-Stack & AI Developer",
-    company: "Independent",
-    period: "Jul 2024 – Present",
-    icon: "🤖",
-    accent: "#a78bfa",
+    role: "IT Programmer Intern",
+    company: "PT Asian Isuzu Casting Center",
+    period: "Aug 2025 – Jan 2026",
+    icon: <Database size={12} />,
+    accent: "#ff003c",
     points: [
-      "Built custom web architectures tailored to client operational requirements.",
-      "Integrated machine learning models into functional, production-deployed web apps.",
-      "Delivered end-to-end solutions from system design to deployment.",
+      "Developed a web-based Quality Control & Traceability system using PHP (Laravel) and MySQL to replace manual recording.",
+      "Analyzed business process flowcharts and architecture to ensure system stability and strict compliance with factory SOPs.",
+      "Successfully reduced human error in data input by 70% and accelerated the rendering time of QC summary reports for management.",
+      "Collaborated to design future system integration architectures with the company's ERP system.",
+      "Provided IT support by managing server/CCTV IP addressing and assisted with troubleshooting Raspberry Pi devices."
+    ],
+  },
+  {
+    role: "Freelance Web & AI Developer",
+    company: "Self-employed",
+    period: "Jul 2024 – Present",
+    icon: <Terminal size={12} />,
+    accent: "#7000ff",
+    points: [
+      "Developed custom web application modules and architectures using PHP (Laravel & CodeIgniter) and MySQL based on requirements.",
+      "Analyzed client workflows to translate operational needs into efficient application features.",
+      "Engineered an AI-driven HR Employee Burnout Prediction System (React.js/Express.js frontend, Python/Flask ML backend).",
+      "Collaborated with clients (university students and small business owners) to ensure final deliverables met expectations."
     ],
   },
 ];
+
+const education = [
+  {
+    degree: "Bachelor of Informatics Engineering (GPA: 3.92/4.00)",
+    school: "Universitas Buana Perjuangan Karawang",
+    period: "2023 - Present (6th-Semester)",
+    icon: <Brain size={16} />,
+    accent: "#00f0ff"
+  },
+  {
+    degree: "Mathematics and Natural Sciences Major",
+    school: "SMA Negeri 1 Telukjambe",
+    period: "2020 - 2023",
+    icon: <Fingerprint size={16} />,
+    accent: "#7000ff"
+  }
+];
+
+// ─── CUSTOM CURSOR ────────────────────────────────────────────────────────────
+
+function CustomCursor() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const updateMousePosition = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    const updateHoverState = (e) => {
+      if (e.target.closest('button, a, .interactive')) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+    
+    window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener("mouseover", updateHoverState);
+    
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener("mouseover", updateHoverState);
+    };
+  }, []);
+
+  return (
+    <>
+      <motion.div
+        className="fixed top-0 left-0 w-4 h-4 bg-[#00f0ff] rounded-full pointer-events-none z-[100] mix-blend-screen"
+        animate={{
+          x: mousePosition.x - 8,
+          y: mousePosition.y - 8,
+          scale: isHovering ? 1.5 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
+      />
+      <motion.div
+        className="fixed top-0 left-0 w-12 h-12 border border-[#00f0ff] rounded-full pointer-events-none z-[99]"
+        animate={{
+          x: mousePosition.x - 24,
+          y: mousePosition.y - 24,
+          scale: isHovering ? 1.5 : 1,
+          opacity: isHovering ? 0.8 : 0.4,
+        }}
+        transition={{ type: "spring", stiffness: 250, damping: 20, mass: 0.8 }}
+      />
+    </>
+  );
+}
 
 // ─── TYPING HOOK ──────────────────────────────────────────────────────────────
 
@@ -143,8 +202,8 @@ function TiltCard({ children, className = "", onClick }) {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 300, damping: 30 });
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), { stiffness: 300, damping: 30 });
 
   const handleMouseMove = (e) => {
     const rect = ref.current?.getBoundingClientRect();
@@ -161,11 +220,12 @@ function TiltCard({ children, className = "", onClick }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 800 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={`cursor-pointer ${className}`}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
+      whileHover={{ scale: 1.05, zIndex: 10 }}
+      whileTap={{ scale: 0.95 }}
+      className={`cursor-none interactive relative ${className}`}
     >
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity rounded-inherit" style={{ transform: "translateZ(1px)" }} />
       {children}
     </motion.div>
   );
@@ -186,137 +246,107 @@ function Modal({ item, type, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+        className="fixed inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       >
-        <motion.div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+        <motion.div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
 
         <motion.div
-          className="relative z-10 w-full sm:max-w-lg bg-[#0c1018] rounded-t-3xl sm:rounded-2xl overflow-hidden border border-white/8"
-          initial={{ y: "100%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: "100%", opacity: 0 }}
-          transition={{ type: "spring", stiffness: 320, damping: 32 }}
-          style={{ boxShadow: `0 -20px 60px ${accent}15, 0 0 0 1px ${accent}20` }}
+          className="relative z-10 w-full sm:max-w-lg bg-[#0a0a0f] rounded-t-3xl sm:rounded-2xl overflow-hidden border border-white/10"
+          initial={{ y: "100%", opacity: 0, scale: 0.9 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: "100%", opacity: 0, scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          style={{ boxShadow: `0 0 80px ${accent}30, inset 0 0 20px ${accent}10` }}
         >
-          {/* Drag handle on mobile */}
-          <div className="flex justify-center pt-3 pb-1 sm:hidden">
-            <div className="w-10 h-1 rounded-full bg-white/20" />
-          </div>
-
-          {/* Accent line */}
-          <div style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)`, height: 1 }} />
+          <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }} />
 
           {/* Header */}
-          <div className="p-5 sm:p-6" style={{ background: `linear-gradient(135deg, ${accent}10, transparent)` }}>
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">{type === "project" ? item.emoji : "📜"}</div>
+          <div className="p-5 sm:p-6 relative overflow-hidden">
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl" style={{ background: accent }} />
+            <div className="flex items-start justify-between gap-4 relative z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 flex items-center justify-center text-2xl rounded-xl bg-white/5 border border-white/10" style={{ boxShadow: `0 0 20px ${accent}40` }}>
+                  {type === "project" ? item.emoji : "🎓"}
+                </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-white leading-tight">{item.title}</h2>
-                  {type === "cert" && <p className="text-xs text-white/40 mt-0.5 font-mono">{item.issuer} · Verified</p>}
+                  <h2 className="text-lg sm:text-xl font-bold text-white leading-tight font-sans tracking-tight">{type === "project" ? item.title : item.degree}</h2>
+                  {type === "edu" && <p className="text-xs text-white/50 mt-1 font-mono">{item.school}</p>}
                 </div>
               </div>
-              <button onClick={onClose} className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all flex-shrink-0">
-                <X size={15} />
+              <button onClick={onClose} className="interactive p-2 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all hover:rotate-90">
+                <X size={16} />
               </button>
             </div>
             {type === "project" && (
-              <div className="flex flex-wrap gap-1.5 mt-4">
+              <div className="flex flex-wrap gap-2 mt-5 relative z-10">
                 {item.tags.map(t => (
-                  <span key={t} style={{ color: accent, borderColor: `${accent}40`, background: `${accent}10` }} className="px-2.5 py-0.5 rounded-full text-xs font-mono border">{t}</span>
+                  <span key={t} style={{ color: accent, borderColor: `${accent}40`, background: `${accent}15` }} className="px-2.5 py-1 rounded-md text-xs font-mono border backdrop-blur-sm">{t}</span>
                 ))}
               </div>
             )}
           </div>
 
           {/* Body */}
-          <div className="px-5 sm:px-6 pb-2 space-y-4">
-
-            {/* Preview image */}
-            {type === "project" && item.image && (
-              <div className="rounded-xl overflow-hidden border border-white/8">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full object-cover"
-                  style={{ maxHeight: 180 }}
-                  onError={(e) => { e.target.style.display = "none"; }}
-                />
-              </div>
-            )}
-
-            {/* Live demo iframe preview */}
+          <div className="px-5 sm:px-6 pb-2 space-y-5">
             {type === "project" && item.demo && !item.image && (
-              <div className="rounded-xl overflow-hidden border border-white/8" style={{ height: 180 }}>
+              <div className="rounded-xl overflow-hidden border border-white/10 relative group" style={{ height: 200 }}>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 pointer-events-none" />
                 <iframe
                   src={item.demo}
                   title={item.title}
                   className="w-full h-full"
-                  style={{ pointerEvents: "none", transform: "scale(0.8)", transformOrigin: "top left", width: "125%", height: "125%" }}
+                  style={{ pointerEvents: "none", transform: "scale(0.7)", transformOrigin: "top left", width: "142%", height: "142%" }}
                 />
               </div>
             )}
 
-            <p className="text-white/60 text-sm leading-relaxed">{type === "project" ? item.longDesc : item.desc}</p>
+            <p className="text-white/70 text-sm leading-relaxed font-sans">{type === "project" ? item.longDesc : `${item.school} | ${item.period}`}</p>
 
             {type === "project" && (
               <div>
-                <p className="text-xs font-mono text-white/30 uppercase tracking-widest mb-3">Key Highlights</p>
+                <div className="flex items-center gap-2 mb-3">
+                  <Activity size={14} style={{ color: accent }} />
+                  <p className="text-xs font-mono text-white/50 uppercase tracking-widest">System Capabilities</p>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {item.highlights.map((h, i) => (
-                    <div key={i} className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-white/60">
-                      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.accent }} />
+                    <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} key={i} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-white/80 hover:bg-white/[0.06] transition-colors">
+                      <Hexagon size={12} style={{ color: accent }} />
                       {h}
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
             )}
-
-            {type === "cert" && (
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/8">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
-                  style={{ background: `${item.accent}15`, border: `1px solid ${item.accent}30`, color: item.accent }}>
-                  {item.badge}
-                </div>
-                <div>
-                  <p className="text-xs text-white/30">Issued by</p>
-                  <p className="text-sm font-semibold text-white">{item.issuer}</p>
-                </div>
-              </div>
-            )}
-
           </div>
 
-          <div className="p-5 sm:p-6 pt-4 space-y-2">
+          <div className="p-5 sm:p-6 pt-6 space-y-3">
             {type === "project" && (
               item.demo ? (
-                /* Tombol nyala kalau ada link demo */
                 <a
                   href={item.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all hover:opacity-90"
-                  style={{ background: `linear-gradient(135deg, ${item.accent}CC, ${item.accent}88)`, color: "#fff" }}
+                  className="interactive w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  style={{ background: `linear-gradient(135deg, ${accent}, #000)`, color: "#fff", border: `1px solid ${accent}` }}
                 >
-                  <ExternalLink size={14} />
-                  Live Demo
+                  <Rocket size={16} />
+                  LAUNCH LIVE DEMO
                 </a>
               ) : (
-                /* Tombol mati (disabled) kalau demo null */
                 <button
                   disabled
-                  className="w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 cursor-not-allowed border border-white/5 bg-white/[0.02] text-white/20"
+                  className="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 cursor-not-allowed border border-white/10 bg-white/[0.02] text-white/30"
                 >
-                  <ExternalLink size={14} />
-                  Demo Not Available
+                  <Shield size={16} />
+                  INTERNAL SYSTEM (NO PUBLIC DEMO)
                 </button>
               )
             )}
             
-            <button onClick={onClose} className="w-full py-2.5 rounded-xl border border-white/8 text-sm text-white/40 hover:text-white hover:border-white/15 hover:bg-white/5 transition-all font-mono">
-              Close
+            <button onClick={onClose} className="interactive w-full py-3 rounded-xl border border-white/10 text-sm text-white/50 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all font-mono uppercase tracking-widest">
+              Close Interface
             </button>
           </div>
         </motion.div>
@@ -329,27 +359,33 @@ function Modal({ item, type, onClose }) {
 
 function Section({ id, children }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
     <motion.section id={id} ref={ref}
-      initial={{ opacity: 0, y: 48 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-      className="py-16 sm:py-24 px-4 max-w-5xl mx-auto"
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="py-20 sm:py-32 px-4 max-w-6xl mx-auto relative z-10"
     >
       {children}
     </motion.section>
   );
 }
 
-function SectionLabel({ icon: Icon, label, accent = "#38bdf8" }) {
+function SectionLabel({ icon: Icon, label, accent = "#00f0ff" }) {
   return (
-    <div className="flex items-center gap-3 mb-10 sm:mb-12">
-      <div className="p-2 rounded-lg" style={{ background: `${accent}15`, border: `1px solid ${accent}25` }}>
-        <Icon size={15} style={{ color: accent }} />
+    <div className="flex items-center gap-4 mb-12 sm:mb-16">
+      <div className="relative">
+        <div className="absolute inset-0 blur-md opacity-50 rounded-lg" style={{ background: accent }} />
+        <div className="relative p-3 rounded-xl bg-[#0a0a0f] border" style={{ borderColor: `${accent}40` }}>
+          <Icon size={18} style={{ color: accent }} />
+        </div>
       </div>
-      <span className="text-xs font-mono uppercase tracking-[0.2em]" style={{ color: accent }}>{label}</span>
-      <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${accent}25, transparent)` }} />
+      <h2 className="text-xl sm:text-2xl font-black uppercase tracking-[0.3em] font-sans" style={{ color: "#fff" }}>
+        {label}
+        <span style={{ color: accent }}>_</span>
+      </h2>
+      <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${accent}50, transparent)` }} />
     </div>
   );
 }
@@ -361,7 +397,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
+    const fn = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
@@ -372,63 +408,67 @@ function Navbar() {
     <>
       <motion.nav
         className="fixed top-0 left-0 right-0 z-40 transition-all duration-500"
-        style={scrolled ? { background: "rgba(6,8,14,0.92)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" } : {}}
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        style={scrolled ? { background: "rgba(10,10,15,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(0,240,255,0.1)" } : { padding: "10px 0" }}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-        <div className="max-w-5xl mx-auto px-4 h-14 sm:h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #38bdf8, #818cf8)" }}>
-              <Terminal size={13} className="text-white" />
+        <div className="max-w-6xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 interactive cursor-none" onClick={() => window.scrollTo(0, 0)}>
+            <div className="relative flex items-center justify-center w-10 h-10">
+              <div className="absolute inset-0 bg-[#00f0ff] blur-md opacity-40 rounded-full animate-pulse" />
+              <div className="relative w-full h-full bg-[#0a0a0f] border border-[#00f0ff]/50 rounded-xl flex items-center justify-center transform rotate-45 hover:rotate-90 transition-transform duration-500">
+                <Terminal size={16} className="text-[#00f0ff] -rotate-45" />
+              </div>
             </div>
-            <span className="font-mono text-sm text-white/70">luthfi.dev</span>
+            <div className="flex flex-col">
+              <span className="font-black text-sm tracking-widest uppercase text-white leading-none">Luthfi.</span>
+              <span className="font-mono text-[10px] text-[#00f0ff] tracking-widest">SYS_ONLINE</span>
+            </div>
           </div>
-          {/* Desktop nav */}
-          <div className="hidden sm:flex items-center gap-6 text-xs font-mono text-white/40">
-            {["experience", "projects", "skills", "certifications"].map(s => (
-              <button key={s} onClick={() => scroll(s)} className="hover:text-white transition-colors capitalize tracking-wide">{s}</button>
+          
+          <div className="hidden md:flex items-center gap-8 text-xs font-mono text-white/50 uppercase tracking-widest">
+            {["experience", "projects", "skills", "education"].map(s => (
+              <button key={s} onClick={() => scroll(s)} className="interactive hover:text-[#00f0ff] transition-colors relative group py-2">
+                {s}
+                <span className="absolute bottom-0 left-0 w-0 h-px bg-[#00f0ff] transition-all group-hover:w-full" />
+              </button>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => scroll("contact")} className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all"
-              style={{ background: "rgba(56,189,248,0.08)", border: "1px solid rgba(56,189,248,0.25)", color: "#38bdf8" }}>
-              Contact
+          
+          <div className="flex items-center gap-4">
+            <button onClick={() => scroll("contact")} className="interactive hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-sm text-xs font-bold uppercase tracking-widest transition-all relative overflow-hidden group border border-[#00f0ff]/30 bg-[#00f0ff]/5 hover:bg-[#00f0ff]/20 text-[#00f0ff]">
+              <span className="relative z-10 flex items-center gap-2"><Wifi size={14} className="animate-pulse" /> Connect</span>
             </button>
-            {/* Mobile hamburger */}
-            <button onClick={() => setMenuOpen(v => !v)} className="sm:hidden p-2 rounded-lg bg-white/5 border border-white/8">
+            
+            <button onClick={() => setMenuOpen(v => !v)} className="interactive md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-white">
               <div className="space-y-1.5">
-                <motion.div className="w-5 h-0.5 bg-white/60 rounded" animate={menuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }} />
-                <motion.div className="w-5 h-0.5 bg-white/60 rounded" animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} />
-                <motion.div className="w-5 h-0.5 bg-white/60 rounded" animate={menuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }} />
+                <motion.div className="w-5 h-0.5 bg-white rounded" animate={menuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }} />
+                <motion.div className="w-5 h-0.5 bg-white rounded" animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} />
+                <motion.div className="w-5 h-0.5 bg-white rounded" animate={menuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }} />
               </div>
             </button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-30 sm:hidden"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-30 md:hidden flex items-center justify-center"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }} 
+            animate={{ opacity: 1, backdropFilter: "blur(20px)" }} 
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
           >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} />
-            <motion.div
-              className="absolute top-14 left-4 right-4 rounded-2xl border border-white/8 overflow-hidden"
-              style={{ background: "#0c1018" }}
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            >
-              {["experience", "projects", "skills", "certifications", "contact"].map((s, i) => (
+            <div className="absolute inset-0 bg-[#0a0a0f]/90" onClick={() => setMenuOpen(false)} />
+            <motion.div className="relative z-10 w-full max-w-xs flex flex-col gap-6 p-6">
+              {["experience", "projects", "skills", "education", "contact"].map((s, i) => (
                 <motion.button
                   key={s} onClick={() => scroll(s)}
-                  className="w-full text-left px-5 py-4 text-sm font-mono text-white/60 hover:text-white hover:bg-white/5 transition-all capitalize border-b border-white/5 last:border-0"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  className="interactive text-center text-2xl font-black uppercase tracking-widest text-white/50 hover:text-[#00f0ff] transition-colors"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                 >
                   {s}
                 </motion.button>
@@ -441,28 +481,37 @@ function Navbar() {
   );
 }
 
-// ─── FLOATING ORBS ────────────────────────────────────────────────────────────
+// ─── CYBER BACKGROUND ─────────────────────────────────────────────────────────
 
-function FloatingOrbs() {
+function CyberBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#06080e]">
+      {/* Dynamic Grid */}
+      <div className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: "linear-gradient(rgba(0, 240, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.2) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          transform: "perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px)",
+        }} />
+      
+      {/* Glowing Orbs */}
       <motion.div
-        className="absolute rounded-full"
-        style={{ width: 500, height: 500, top: "10%", left: "60%", background: "radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%)", filter: "blur(40px)" }}
-        animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute rounded-full mix-blend-screen"
+        style={{ width: 800, height: 800, top: "-20%", left: "-10%", background: "radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 70%)", filter: "blur(60px)" }}
+        animate={{ x: [0, 50, 0], y: [0, -50, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       />
       <motion.div
-        className="absolute rounded-full"
-        style={{ width: 400, height: 400, top: "50%", left: "-10%", background: "radial-gradient(circle, rgba(129,140,248,0.06) 0%, transparent 70%)", filter: "blur(40px)" }}
-        animate={{ x: [0, -20, 0], y: [0, 30, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute rounded-full mix-blend-screen"
+        style={{ width: 600, height: 600, bottom: "-10%", right: "-10%", background: "radial-gradient(circle, rgba(112,0,255,0.08) 0%, transparent 70%)", filter: "blur(60px)" }}
+        animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
       />
       <motion.div
-        className="absolute rounded-full"
-        style={{ width: 300, height: 300, top: "70%", left: "70%", background: "radial-gradient(circle, rgba(52,211,153,0.05) 0%, transparent 70%)", filter: "blur(40px)" }}
-        animate={{ x: [0, 15, 0], y: [0, 25, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        className="absolute rounded-full mix-blend-screen"
+        style={{ width: 500, height: 500, top: "40%", left: "40%", background: "radial-gradient(circle, rgba(255,0,60,0.03) 0%, transparent 70%)", filter: "blur(60px)" }}
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
   );
@@ -471,95 +520,90 @@ function FloatingOrbs() {
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
-  const typed = useTyping(["Software Engineer", "AI & ML Enthusiast", "Full-Stack Developer", "Manufacturing Digitalizer"]);
+  const typed = useTyping(["Software Engineer", "AI & Computer Vision Enthusiast", "Full-Stack Developer", "Industrial Digitalizer"]);
   const scroll = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 text-center overflow-hidden">
-      <FloatingOrbs />
-      {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.015]"
-        style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
-
-      <div className="relative z-10 max-w-3xl w-full">
-        {/* Status badge */}
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 text-center z-10 pt-20">
+      <div className="relative max-w-4xl w-full flex flex-col items-center">
+        
         <motion.div
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono mb-8"
-          style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.2)", color: "#38bdf8" }}
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+          className="inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-10 border border-[#00f0ff]/30 bg-[#00f0ff]/5 backdrop-blur-md"
+          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
         >
-          <motion.span className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]"
-            animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-          Open to Internship Opportunities
+          <motion.div className="w-2 h-2 bg-[#00f0ff] rounded-sm" animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+          <span className="text-[#00f0ff]">System Active // Ready for Deploy</span>
         </motion.div>
 
-        {/* Name */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }}>
-          <h1 className="font-black tracking-tight leading-none text-white text-4xl sm:text-6xl mb-1">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, type: "spring", stiffness: 200 }}>
+          <h1 className="font-black tracking-tighter leading-none text-white text-5xl sm:text-7xl md:text-8xl mb-2 font-sans uppercase">
             Luthfi
           </h1>
-          <h1 className="font-black tracking-tight leading-none text-4xl sm:text-6xl mb-2"
-            style={{ background: "linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #a78bfa 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Rafananda
+          <h1 className="font-black tracking-tighter leading-none text-5xl sm:text-7xl md:text-8xl mb-4 font-sans uppercase relative inline-block">
+            <span className="absolute inset-0 bg-gradient-to-r from-[#00f0ff] via-[#7000ff] to-[#ff003c] blur-xl opacity-50" />
+            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#7000ff] to-[#ff003c]">
+              Rafananda
+            </span>
           </h1>
-          <p className="text-white/30 text-sm sm:text-lg font-light tracking-widest uppercase mb-8">Naufal</p>
+          <p className="text-white/40 text-lg sm:text-2xl font-light tracking-[0.5em] uppercase mb-12 font-sans">Naufal</p>
         </motion.div>
 
-        {/* Typing */}
-        <motion.div className="h-9 flex items-center justify-center mb-5"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
-          <span className="text-base sm:text-xl font-mono" style={{ color: "#818cf8" }}>{typed}</span>
-          <motion.span className="ml-1 w-0.5 h-6 inline-block rounded-full bg-[#818cf8]"
-            animate={{ opacity: [1, 0] }} transition={{ duration: 0.8, repeat: Infinity }} />
+        <motion.div className="h-10 flex items-center justify-center mb-8 px-6 py-2 border-l-2 border-r-2 border-[#00f0ff]/50 bg-black/20"
+          initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: "auto" }} transition={{ delay: 0.5, duration: 0.8 }}>
+          <span className="text-sm sm:text-xl font-mono text-white/90">{typed}</span>
+          <motion.span className="ml-2 w-3 h-5 inline-block bg-[#00f0ff]"
+            animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity }} />
         </motion.div>
 
-        {/* Sub */}
-        <motion.p className="text-white/35 text-sm sm:text-base font-mono mb-10 leading-relaxed"
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}>
-          Informatics Engineering · GPA <span className="text-white/60">3.92</span><br />
-          <span className="text-white/20 text-xs sm:text-sm">Universitas Buana Perjuangan Karawang</span>
+        <motion.p className="text-white/50 text-sm sm:text-base font-mono mb-12 leading-relaxed max-w-2xl mx-auto"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}>
+          Informatics Engineering Student at UBP Karawang (GPA: 3.92).<br/>
+          Specializing in AI Integration, Computer Vision QA Systems, and Industrial Web Applications.
         </motion.p>
 
-        {/* CTAs */}
-        <motion.div className="flex flex-col sm:flex-row gap-3 justify-center"
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
-          <motion.button
+        <motion.div className="flex flex-col sm:flex-row gap-6 justify-center w-full sm:w-auto"
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
+          <button
             onClick={() => scroll("projects")}
-            className="group flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-white text-sm font-semibold"
-            style={{ background: "linear-gradient(135deg, #38bdf8, #818cf8)" }}
-            whileHover={{ scale: 1.04, boxShadow: "0 0 40px rgba(56,189,248,0.3)" }}
-            whileTap={{ scale: 0.97 }}
+            className="interactive group relative flex items-center justify-center gap-3 px-8 py-4 bg-transparent border-2 border-[#00f0ff] text-[#00f0ff] font-black uppercase tracking-widest text-sm overflow-hidden"
           >
-            View My Work
-            <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-          </motion.button>
-          <motion.button
+            <div className="absolute inset-0 bg-[#00f0ff] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
+            <span className="relative z-10 group-hover:text-black transition-colors duration-300">Initialize Projects</span>
+            <Terminal size={16} className="relative z-10 group-hover:text-black transition-colors duration-300" />
+          </button>
+          
+          <button
             onClick={() => scroll("contact")}
-            className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-white/70 text-sm font-semibold border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:text-white hover:border-white/20 transition-all"
-            whileTap={{ scale: 0.97 }}
+            className="interactive group flex items-center justify-center gap-3 px-8 py-4 bg-white/5 border border-white/10 hover:border-[#7000ff]/50 text-white font-bold uppercase tracking-widest text-sm transition-all hover:bg-[#7000ff]/10"
           >
-            <Mail size={15} />
-            Contact Me
-          </motion.button>
+            <Mail size={16} className="text-[#7000ff]" />
+            Establish Link
+          </button>
         </motion.div>
 
-        {/* Stats row */}
-        <motion.div className="flex justify-center gap-6 sm:gap-10 mt-12 pt-10 border-t border-white/5"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}>
-          {[["3.92", "GPA"], ["70%", "Error Reduced"], ["3+", "Projects"]].map(([val, lab]) => (
-            <div key={lab} className="text-center">
-              <p className="text-lg sm:text-2xl font-black text-white">{val}</p>
-              <p className="text-xs text-white/30 font-mono mt-0.5">{lab}</p>
+        {/* Cyber stats */}
+        <motion.div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mt-20"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}>
+          {[
+            { v: "3.92", l: "GPA_SCORE", c: "#00f0ff" },
+            { v: "70%", l: "ERROR_REDUCED", c: "#ff003c" },
+            { v: "1st", l: "TECHNOVISION", c: "#7000ff" },
+            { v: "100%", l: "DEDICATION", c: "#00f0ff" }
+          ].map((stat, i) => (
+            <div key={i} className="p-4 border border-white/5 bg-black/40 backdrop-blur-sm relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1" style={{ background: stat.c, opacity: 0.5 }} />
+              <p className="text-2xl sm:text-3xl font-black mb-1 font-sans" style={{ color: stat.c }}>{stat.v}</p>
+              <p className="text-[10px] font-mono text-white/40 tracking-widest uppercase">{stat.l}</p>
             </div>
           ))}
         </motion.div>
       </div>
-
-      <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/20"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
-        <span className="text-[10px] font-mono tracking-widest uppercase">Scroll</span>
-        <motion.div animate={{ y: [0, 4, 0] }} transition={{ duration: 1.6, repeat: Infinity }}>
-          <ChevronDown size={14} />
+      
+      <motion.div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[#00f0ff]/50 flex flex-col items-center gap-2 cursor-none"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}>
+        <span className="text-[10px] font-mono tracking-widest">SCROLL_DOWN</span>
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+          <ChevronDown size={20} />
         </motion.div>
       </motion.div>
     </section>
@@ -571,40 +615,50 @@ function Hero() {
 function Experience() {
   return (
     <Section id="experience">
-      <SectionLabel icon={Briefcase} label="Experience" />
+      <SectionLabel icon={Activity} label="Experience Logs" accent="#ff003c" />
       <div className="relative">
-        <div className="absolute left-5 sm:left-6 top-0 bottom-0 w-px"
-          style={{ background: "linear-gradient(to bottom, rgba(56,189,248,0.4), rgba(129,140,248,0.2), transparent)" }} />
-        <div className="space-y-6 sm:space-y-8">
+        {/* Neon Line */}
+        <div className="absolute left-[20px] sm:left-[27px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#ff003c] via-[#7000ff] to-transparent opacity-50" />
+        
+        <div className="space-y-12">
           {experience.map((exp, i) => (
-            <motion.div key={i} className="relative pl-12 sm:pl-16"
-              initial={{ opacity: 0, x: -24 }}
+            <motion.div key={i} className="relative pl-14 sm:pl-20"
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.6 }}>
-              {/* Node */}
-              <div className="absolute left-3 sm:left-4 top-4 w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-xs"
-                style={{ border: `2px solid ${exp.accent}`, background: `${exp.accent}20` }}>
-                <span style={{ fontSize: 9 }}>{exp.icon}</span>
+              transition={{ delay: i * 0.1, duration: 0.7, type: "spring" }}>
+              
+              {/* Glowing Node */}
+              <div className="absolute left-[9px] sm:left-[16px] top-6 w-6 h-6 rounded-sm bg-[#0a0a0f] border-2 flex items-center justify-center z-10 rotate-45"
+                style={{ borderColor: exp.accent, boxShadow: `0 0 15px ${exp.accent}60` }}>
+                <div className="-rotate-45" style={{ color: exp.accent }}>{exp.icon}</div>
               </div>
 
-              <div className="p-4 sm:p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 group">
-                <div className="flex flex-col gap-1 mb-1">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                    <h3 className="text-white font-semibold text-sm sm:text-base">{exp.role}</h3>
-                    <span className="text-xs font-mono px-2 py-0.5 rounded-full w-fit" style={{ color: exp.accent, background: `${exp.accent}12`, border: `1px solid ${exp.accent}25` }}>{exp.company}</span>
+              <TiltCard className="p-1">
+                <div className="p-6 sm:p-8 rounded-lg border border-white/10 bg-[#0a0a0f]/80 backdrop-blur-md relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-32 h-32 opacity-10 bg-gradient-to-bl blur-3xl pointer-events-none" style={{ backgroundImage: `linear-gradient(to bottom left, ${exp.accent}, transparent)` }} />
+                  
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/5 pb-4">
+                    <div>
+                      <h3 className="text-white font-black text-lg sm:text-xl font-sans uppercase tracking-wide">{exp.role}</h3>
+                      <p className="text-white/60 font-mono text-sm mt-1">{exp.company}</p>
+                    </div>
+                    <div className="px-3 py-1.5 border rounded-sm font-mono text-xs uppercase tracking-widest whitespace-nowrap"
+                      style={{ borderColor: `${exp.accent}40`, color: exp.accent, backgroundColor: `${exp.accent}10` }}>
+                      {exp.period}
+                    </div>
                   </div>
-                  <p className="text-xs font-mono text-white/25">{exp.period}</p>
+                  
+                  <ul className="space-y-3">
+                    {exp.points.map((p, j) => (
+                      <li key={j} className="flex items-start gap-3 text-sm text-white/70 font-mono leading-relaxed">
+                        <span className="mt-1 flex-shrink-0" style={{ color: exp.accent }}>▹</span>
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="mt-3 space-y-2">
-                  {exp.points.map((p, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-xs sm:text-sm text-white/50">
-                      <Zap size={11} className="mt-0.5 flex-shrink-0" style={{ color: exp.accent }} />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
@@ -618,30 +672,45 @@ function Experience() {
 function Projects({ onOpen }) {
   return (
     <Section id="projects">
-      <SectionLabel icon={Layers} label="Projects" accent="#818cf8" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <SectionLabel icon={Layers} label="Deployed Modules" accent="#00f0ff" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((proj, i) => (
           <motion.div key={proj.id}
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.55 }}>
+            transition={{ delay: i * 0.1, duration: 0.6 }}>
             <TiltCard onClick={() => onOpen(proj, "project")}
-              className="h-full p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-300 group"
-              style={{ background: `linear-gradient(135deg, ${proj.accentDim}, transparent)` }}>
-              <div style={{ transform: "translateZ(20px)" }}>
-                <div className="text-3xl mb-4">{proj.emoji}</div>
-                <h3 className="text-white font-bold text-sm sm:text-base mb-2 font-mono leading-snug">{proj.title}</h3>
-                <p className="text-white/40 text-xs leading-relaxed mb-4">{proj.shortDesc}</p>
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {proj.tags.slice(0, 3).map(t => (
-                    <span key={t} className="px-2 py-0.5 rounded-full text-xs font-mono border"
-                      style={{ color: proj.accent, borderColor: `${proj.accent}30`, background: `${proj.accent}08` }}>{t}</span>
-                  ))}
-                </div>
-                <div className="flex items-center gap-1.5 text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: proj.accent }}>
-                  <span>View details</span>
-                  <ExternalLink size={11} />
+              className="h-full group">
+              <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden flex flex-col transition-colors group-hover:border-white/30"
+                style={{ boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.02)` }}>
+                
+                {/* Cyber Grid Bg inside card */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+                
+                <div className="absolute -right-10 -top-10 w-40 h-40 opacity-20 blur-3xl rounded-full transition-opacity group-hover:opacity-40" style={{ background: proj.accent }} />
+
+                <div className="relative z-10" style={{ transform: "translateZ(30px)" }}>
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-12 h-12 flex items-center justify-center text-2xl bg-black border rounded-lg" style={{ borderColor: `${proj.accent}50`, color: proj.accent, boxShadow: `0 0 15px ${proj.accent}30` }}>
+                      {proj.emoji}
+                    </div>
+                    <div className="p-2 bg-white/5 rounded-full text-white/30 group-hover:text-white transition-colors group-hover:rotate-45 duration-300">
+                      <ExternalLink size={16} />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-white font-black text-xl mb-3 font-sans uppercase leading-tight tracking-tight">{proj.title}</h3>
+                  <p className="text-white/50 text-sm mb-6 flex-grow font-mono leading-relaxed">{proj.shortDesc}</p>
+                  
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {proj.tags.slice(0, 3).map(t => (
+                      <span key={t} className="px-2 py-1 rounded-sm text-[10px] font-mono border uppercase tracking-wider"
+                        style={{ color: proj.accent, borderColor: `${proj.accent}30`, backgroundColor: `${proj.accent}05` }}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </TiltCard>
@@ -657,30 +726,34 @@ function Projects({ onOpen }) {
 function Skills() {
   return (
     <Section id="skills">
-      <SectionLabel icon={Cpu} label="Skills & Tools" accent="#34d399" />
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <SectionLabel icon={Cpu} label="System Capabilities" accent="#7000ff" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {skills.map((group, i) => (
           <motion.div key={group.label}
-            className="p-5 rounded-2xl border border-white/5 bg-white/[0.02]"
-            initial={{ opacity: 0, y: 20 }}
+            className="p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden group"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="p-1.5 rounded-lg" style={{ background: `${group.accent}15`, border: `1px solid ${group.accent}25` }}>
-                <group.icon size={14} style={{ color: group.accent }} />
+            transition={{ delay: i * 0.15 }}>
+            
+            <div className="absolute bottom-0 left-0 w-full h-1 transition-all duration-300 opacity-50 group-hover:opacity-100" style={{ background: group.accent }} />
+
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 rounded-lg border bg-black" style={{ borderColor: `${group.accent}40`, boxShadow: `0 0 20px ${group.accent}20` }}>
+                <group.icon size={20} style={{ color: group.accent }} />
               </div>
-              <span className="text-xs font-mono text-white/40 uppercase tracking-wider">{group.label}</span>
+              <span className="text-sm font-black text-white uppercase tracking-widest font-sans">{group.label}</span>
             </div>
-            <div className="flex flex-wrap gap-2">
+            
+            <div className="flex flex-wrap gap-2.5">
               {group.items.map((item, j) => (
                 <motion.span key={item}
-                  className="px-2.5 py-1 rounded-lg text-xs font-mono border border-white/5 bg-white/[0.03] text-white/50 hover:text-white/80 hover:border-white/15 transition-all cursor-default"
-                  initial={{ opacity: 0, scale: 0.85 }}
+                  className="interactive px-3 py-1.5 rounded-sm text-xs font-mono border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all cursor-none uppercase tracking-wide"
+                  initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.04 + j * 0.04 }}
-                  whileHover={{ y: -2 }}>
+                  transition={{ delay: i * 0.1 + j * 0.05 }}
+                  whileHover={{ borderColor: group.accent, backgroundColor: `${group.accent}10`, color: group.accent, y: -2 }}>
                   {item}
                 </motion.span>
               ))}
@@ -692,30 +765,34 @@ function Skills() {
   );
 }
 
-// ─── CERTIFICATIONS ───────────────────────────────────────────────────────────
+// ─── EDUCATION ───────────────────────────────────────────────────────────
 
-function Certifications({ onOpen }) {
+function Education({ onOpen }) {
   return (
-    <Section id="certifications">
-      <SectionLabel icon={Award} label="Certifications" accent="#a78bfa" />
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {certifications.map((cert, i) => (
-          <motion.div key={cert.id}
-            initial={{ opacity: 0, y: 20 }}
+    <Section id="education">
+      <SectionLabel icon={Brain} label="Education & Core Data" accent="#00f0ff" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {education.map((edu, i) => (
+          <motion.div key={i}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}>
-            <TiltCard onClick={() => onOpen(cert, "cert")}
-              className="h-full p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-white/10 transition-all duration-300 group">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold mb-4 flex-shrink-0"
-                style={{ background: `${cert.accent}12`, border: `1px solid ${cert.accent}25`, color: cert.accent }}>
-                {cert.badge}
-              </div>
-              <p className="text-white/25 text-xs font-mono mb-1">{cert.issuer}</p>
-              <h3 className="text-white text-sm font-semibold leading-snug mb-4">{cert.title}</h3>
-              <div className="flex items-center gap-1.5 text-xs font-mono text-white/25 group-hover:text-white/50 transition-colors">
-                <span>View details</span>
-                <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+            <TiltCard onClick={() => onOpen(edu, "edu")}
+              className="h-full group">
+              <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden transition-all group-hover:border-white/30">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl blur-3xl opacity-10 group-hover:opacity-30 transition-opacity" style={{ from: edu.accent, to: "transparent" }} />
+                <div className="relative z-10" style={{ transform: "translateZ(20px)" }}>
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-6 border bg-black"
+                    style={{ borderColor: `${edu.accent}50`, color: edu.accent, boxShadow: `0 0 15px ${edu.accent}30` }}>
+                    {edu.icon}
+                  </div>
+                  <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-2">{edu.school}</p>
+                  <h3 className="text-white text-lg font-black font-sans uppercase leading-snug mb-4">{edu.degree}</h3>
+                  <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-sm text-xs font-mono text-white/50">
+                    {edu.period}
+                  </div>
+                </div>
               </div>
             </TiltCard>
           </motion.div>
@@ -729,38 +806,45 @@ function Certifications({ onOpen }) {
 
 function Footer() {
   return (
-    <footer id="contact" className="border-t border-white/5 py-16 sm:py-20 px-4 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(56,189,248,0.04) 0%, transparent 70%)" }} />
-      <div className="max-w-3xl mx-auto text-center relative z-10">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono mb-6"
-            style={{ background: "rgba(129,140,248,0.06)", border: "1px solid rgba(129,140,248,0.2)", color: "#818cf8" }}>
-            <Sparkles size={12} />
-            Let's build something together
+    <footer id="contact" className="py-24 px-4 relative overflow-hidden bg-black/50 border-t border-white/10 mt-20">
+      <div className="absolute inset-0 pointer-events-none opacity-20"
+        style={{ backgroundImage: "radial-gradient(circle at center, #00f0ff 0%, transparent 50%)", backgroundSize: "100% 100%" }} />
+      
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-8 border border-[#7000ff]/40 bg-[#7000ff]/10 text-[#7000ff]">
+            <Sparkles size={14} className="animate-pulse" />
+            Initialization Complete
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white mb-3 tracking-tight">Get In Touch</h2>
-          <p className="text-white/30 text-sm font-mono mb-10 max-w-sm mx-auto leading-relaxed">
-            Open to collaborations & freelance.
+          <h2 className="text-4xl sm:text-6xl font-black text-white mb-6 tracking-tighter uppercase font-sans">Establish Connection</h2>
+          <p className="text-white/40 text-sm sm:text-base font-mono mb-12 max-w-xl mx-auto leading-relaxed">
+            Ready to integrate into complex digitalization projects involving information systems, IoT, and AI.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-3 mb-12">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             {[
-              { href: "https://github.com/Luthfi-2004", icon: GitBranch, label: "GitHub", accent: "#ffffff" },
-              { href: "https://linkedin.com", icon: Linkedin, label: "LinkedIn", accent: "#38bdf8" },
-              { href: "mailto:luthfi.rafanandanaufal@gmail.com", icon: Mail, label: "luthfi.rafanandanaufal@gmail.com", accent: "#a78bfa" },
+              { href: "https://github.com/Luthfi-2004", icon: GitBranch, label: "GITHUB_PROFILE", accent: "#ffffff" },
+              { href: "https://www.linkedin.com/in/luthfirafanandanaufal/", icon: Linkedin, label: "LINKEDIN_NETWORK", accent: "#00f0ff" },
+              { href: "mailto:luthfi.rafanandanaufal@gmail.com", icon: Mail, label: "SECURE_EMAIL", accent: "#ff003c" },
             ].map(({ href, icon: Icon, label, accent }) => (
               <motion.a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl text-sm font-mono border border-white/8 bg-white/[0.03] hover:bg-white/[0.07] transition-all"
-                style={{ color: "rgba(255,255,255,0.5)" }}
-                whileHover={{ scale: 1.03, color: accent, borderColor: `${accent}40` }}
-                whileTap={{ scale: 0.97 }}>
-                <Icon size={15} />
-                <span className="truncate max-w-[200px] sm:max-w-none">{label}</span>
+                className="interactive flex items-center justify-center gap-3 px-6 py-4 rounded-sm text-xs font-bold font-sans uppercase tracking-widest border border-white/10 bg-white/5 transition-all overflow-hidden relative group"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity" style={{ background: accent }} />
+                <Icon size={16} className="relative z-10" style={{ color: accent }} />
+                <span className="relative z-10 text-white group-hover:text-white transition-colors">{label}</span>
               </motion.a>
             ))}
           </div>
-          <p className="text-white/15 text-xs font-mono">2025 Luthfi Rafananda Naufal · Built with React & Framer Motion</p>
+          
+          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-white/30 text-[10px] font-mono tracking-widest uppercase">© 2026 LUTHFI RAFANANDA NAUFAL. ALL RIGHTS RESERVED.</p>
+            <div className="flex items-center gap-2 text-[10px] font-mono text-white/30 tracking-widest uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" />
+              SYSTEM_SECURE
+            </div>
+          </div>
         </motion.div>
       </div>
     </footer>
@@ -776,23 +860,33 @@ export default function App() {
 
   return (
     <>
-      <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
       <style>{`
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 4px; }
+        * { box-sizing: border-box; cursor: none !important; }
+        html { scroll-behavior: smooth; background: #06080e; }
+        body { margin: 0; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #06080e; }
-        ::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.2); border-radius: 2px; }
-        h1, h2, h3 { font-family: 'Syne', sans-serif; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.3); border-radius: 0; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,240,255,0.6); }
+        h1, h2, h3 { font-family: 'Inter', sans-serif; }
+        p, span, div { font-family: 'JetBrains Mono', monospace; }
+        ::selection { background: rgba(0,240,255,0.3); color: white; }
       `}</style>
-      <div className="min-h-screen text-white" style={{ background: "#06080e", fontFamily: "'JetBrains Mono', monospace" }}>
+      
+      <CustomCursor />
+      
+      <div className="min-h-screen text-white relative selection:bg-[#00f0ff]/30 selection:text-white">
+        <CyberBackground />
+        
         <Navbar />
         <Hero />
         <Experience />
         <Projects onOpen={openModal} />
         <Skills />
-        <Certifications onOpen={openModal} />
+        <Education onOpen={openModal} />
         <Footer />
+        
         {modal && <Modal item={modal.item} type={modal.type} onClose={closeModal} />}
       </div>
     </>
