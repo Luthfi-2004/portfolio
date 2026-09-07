@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { animate, stagger } from "animejs";
 import {
   GitBranch, Linkedin, Mail, X, ExternalLink, ChevronDown,
   Cpu, Code2, Award, Briefcase, Sparkles, ArrowRight,
@@ -120,51 +120,64 @@ const education = [
 // ─── CUSTOM CURSOR ────────────────────────────────────────────────────────────
 
 function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
+  
   useEffect(() => {
-    const updateMousePosition = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    let cursorX = 0;
+    let cursorY = 0;
+    let ringX = 0;
+    let ringY = 0;
+    let isHovering = false;
+    let requestRef;
+
+    const onMouseMove = (e) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
     };
-    const updateHoverState = (e) => {
+
+    const onMouseOver = (e) => {
       if (e.target.closest('button, a, .interactive')) {
-        setIsHovering(true);
+        if (!isHovering) {
+          isHovering = true;
+          animate(dotRef.current, { scale: 1.5, duration: 200, easing: 'easeOutSine' });
+          animate(ringRef.current, { scale: 1.5, opacity: 0.8, duration: 200, easing: 'easeOutSine' });
+        }
       } else {
-        setIsHovering(false);
+        if (isHovering) {
+          isHovering = false;
+          animate(dotRef.current, { scale: 1, duration: 200, easing: 'easeOutSine' });
+          animate(ringRef.current, { scale: 1, opacity: 0.4, duration: 200, easing: 'easeOutSine' });
+        }
       }
     };
-    
-    window.addEventListener("mousemove", updateMousePosition);
-    window.addEventListener("mouseover", updateHoverState);
-    
+
+    const loop = () => {
+      ringX += (cursorX - ringX) * 0.2;
+      ringY += (cursorY - ringY) * 0.2;
+
+      if (dotRef.current && ringRef.current) {
+        dotRef.current.style.transform = `translate(${cursorX - 8}px, ${cursorY - 8}px) scale(${isHovering ? 1.5 : 1})`;
+        ringRef.current.style.transform = `translate(${ringX - 24}px, ${ringY - 24}px) scale(${isHovering ? 1.5 : 1})`;
+      }
+      requestRef = requestAnimationFrame(loop);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseover", onMouseOver);
+    requestRef = requestAnimationFrame(loop);
+
     return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-      window.removeEventListener("mouseover", updateHoverState);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseover", onMouseOver);
+      cancelAnimationFrame(requestRef);
     };
   }, []);
 
   return (
     <>
-      <motion.div
-        className="fixed top-0 left-0 w-4 h-4 bg-[#00f0ff] rounded-full pointer-events-none z-[100] mix-blend-screen"
-        animate={{
-          x: mousePosition.x - 8,
-          y: mousePosition.y - 8,
-          scale: isHovering ? 1.5 : 1,
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
-      />
-      <motion.div
-        className="fixed top-0 left-0 w-12 h-12 border border-[#00f0ff] rounded-full pointer-events-none z-[99]"
-        animate={{
-          x: mousePosition.x - 24,
-          y: mousePosition.y - 24,
-          scale: isHovering ? 1.5 : 1,
-          opacity: isHovering ? 0.8 : 0.4,
-        }}
-        transition={{ type: "spring", stiffness: 250, damping: 20, mass: 0.8 }}
-      />
+      <div ref={dotRef} className="fixed top-0 left-0 w-4 h-4 bg-[#00f0ff] rounded-full pointer-events-none z-[100] mix-blend-screen" />
+      <div ref={ringRef} className="fixed top-0 left-0 w-12 h-12 border border-[#00f0ff] rounded-full pointer-events-none z-[99] opacity-40" />
     </>
   );
 }
@@ -200,175 +213,239 @@ function useTyping(texts, speed = 75, pause = 2000) {
 
 function TiltCard({ children, className = "", onClick }) {
   const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), { stiffness: 300, damping: 30 });
 
   const handleMouseMove = (e) => {
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    
+    animate(ref.current, {
+      rotateX: -y * 24,
+      rotateY: x * 24,
+      scale: 1.05,
+      duration: 300,
+      easing: 'easeOutQuad'
+    });
   };
   
-  const handleMouseLeave = () => { x.set(0); y.set(0); };
+  const handleMouseLeave = () => {
+    animate(ref.current, {
+      rotateX: 0,
+      rotateY: 0,
+      scale: 1,
+      duration: 500,
+      easing: 'easeOutElastic(1, .5)'
+    });
+  };
+
+  const handleMouseDown = () => {
+    animate(ref.current, { scale: 0.95, duration: 100, easing: 'easeOutSine' });
+  };
+  const handleMouseUp = () => {
+    animate(ref.current, { scale: 1.05, duration: 100, easing: 'easeOutSine' });
+  };
 
   return (
-    <motion.div
+    <div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       onClick={onClick}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
-      whileHover={{ scale: 1.05, zIndex: 10 }}
-      whileTap={{ scale: 0.95 }}
+      style={{ transformStyle: "preserve-3d", perspective: 1000 }}
       className={`cursor-none interactive relative ${className}`}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity rounded-inherit" style={{ transform: "translateZ(1px)" }} />
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 // ─── MODAL ────────────────────────────────────────────────────────────────────
 
 function Modal({ item, type, onClose }) {
+  const overlayRef = useRef(null);
+  const modalRef = useRef(null);
+
   useEffect(() => {
-    const esc = (e) => e.key === "Escape" && onClose();
+    const esc = (e) => e.key === "Escape" && handleClose();
     window.addEventListener("keydown", esc);
     document.body.style.overflow = "hidden";
+    
+    animate(overlayRef.current, {
+      opacity: [0, 1],
+      duration: 300,
+      easing: 'easeOutSine'
+    });
+    
+    animate(modalRef.current, {
+      translateY: ['100%', 0],
+      opacity: [0, 1],
+      scale: [0.9, 1],
+      duration: 600,
+      easing: 'easeOutElastic(1, .8)'
+    });
+
     return () => { window.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, []);
+
+  const handleClose = () => {
+    animate(overlayRef.current, {
+      opacity: 0,
+      duration: 200,
+      easing: 'easeInSine'
+    });
+    animate(modalRef.current, {
+      translateY: '100%',
+      opacity: 0,
+      scale: 0.9,
+      duration: 300,
+      easing: 'easeInSine',
+      complete: onClose
+    });
+  };
 
   const accent = type === "project" ? item.accent : item.accent;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+    <div className="fixed inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div ref={overlayRef} className="absolute inset-0 bg-black/80 backdrop-blur-md opacity-0" onClick={handleClose} />
+
+      <div
+        ref={modalRef}
+        className="relative z-10 w-full sm:max-w-lg bg-[#0a0a0f] rounded-t-3xl sm:rounded-2xl overflow-hidden border border-white/10 opacity-0"
+        style={{ boxShadow: `0 0 80px ${accent}30, inset 0 0 20px ${accent}10` }}
       >
-        <motion.div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
+        <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }} />
 
-        <motion.div
-          className="relative z-10 w-full sm:max-w-lg bg-[#0a0a0f] rounded-t-3xl sm:rounded-2xl overflow-hidden border border-white/10"
-          initial={{ y: "100%", opacity: 0, scale: 0.9 }}
-          animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: "100%", opacity: 0, scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          style={{ boxShadow: `0 0 80px ${accent}30, inset 0 0 20px ${accent}10` }}
-        >
-          <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }} />
-
-          {/* Header */}
-          <div className="p-5 sm:p-6 relative overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl" style={{ background: accent }} />
-            <div className="flex items-start justify-between gap-4 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center text-2xl rounded-xl bg-white/5 border border-white/10" style={{ boxShadow: `0 0 20px ${accent}40` }}>
-                  {type === "project" ? item.emoji : "🎓"}
-                </div>
-                <div>
-                  <h2 className="text-lg sm:text-xl font-bold text-white leading-tight font-sans tracking-tight">{type === "project" ? item.title : item.degree}</h2>
-                  {type === "edu" && <p className="text-xs text-white/50 mt-1 font-mono">{item.school}</p>}
-                </div>
+        <div className="p-5 sm:p-6 relative overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl" style={{ background: accent }} />
+          <div className="flex items-start justify-between gap-4 relative z-10">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 flex items-center justify-center text-2xl rounded-xl bg-white/5 border border-white/10" style={{ boxShadow: `0 0 20px ${accent}40` }}>
+                {type === "project" ? item.emoji : "🎓"}
               </div>
-              <button onClick={onClose} className="interactive p-2 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all hover:rotate-90">
-                <X size={16} />
-              </button>
-            </div>
-            {type === "project" && (
-              <div className="flex flex-wrap gap-2 mt-5 relative z-10">
-                {item.tags.map(t => (
-                  <span key={t} style={{ color: accent, borderColor: `${accent}40`, background: `${accent}15` }} className="px-2.5 py-1 rounded-md text-xs font-mono border backdrop-blur-sm">{t}</span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Body */}
-          <div className="px-5 sm:px-6 pb-2 space-y-5">
-            {type === "project" && item.demo && !item.image && (
-              <div className="rounded-xl overflow-hidden border border-white/10 relative group" style={{ height: 200 }}>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 pointer-events-none" />
-                <iframe
-                  src={item.demo}
-                  title={item.title}
-                  className="w-full h-full"
-                  style={{ pointerEvents: "none", transform: "scale(0.7)", transformOrigin: "top left", width: "142%", height: "142%" }}
-                />
-              </div>
-            )}
-
-            <p className="text-white/70 text-sm leading-relaxed font-sans">{type === "project" ? item.longDesc : `${item.school} | ${item.period}`}</p>
-
-            {type === "project" && (
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Activity size={14} style={{ color: accent }} />
-                  <p className="text-xs font-mono text-white/50 uppercase tracking-widest">System Capabilities</p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {item.highlights.map((h, i) => (
-                    <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} key={i} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-white/80 hover:bg-white/[0.06] transition-colors">
-                      <Hexagon size={12} style={{ color: accent }} />
-                      {h}
-                    </motion.div>
-                  ))}
-                </div>
+                <h2 className="text-lg sm:text-xl font-bold text-white leading-tight font-sans tracking-tight">{type === "project" ? item.title : item.degree}</h2>
+                {type === "edu" && <p className="text-xs text-white/50 mt-1 font-mono">{item.school}</p>}
               </div>
-            )}
-          </div>
-
-          <div className="p-5 sm:p-6 pt-6 space-y-3">
-            {type === "project" && (
-              item.demo ? (
-                <a
-                  href={item.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="interactive w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                  style={{ background: `linear-gradient(135deg, ${accent}, #000)`, color: "#fff", border: `1px solid ${accent}` }}
-                >
-                  <Rocket size={16} />
-                  LAUNCH LIVE DEMO
-                </a>
-              ) : (
-                <button
-                  disabled
-                  className="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 cursor-not-allowed border border-white/10 bg-white/[0.02] text-white/30"
-                >
-                  <Shield size={16} />
-                  INTERNAL SYSTEM (NO PUBLIC DEMO)
-                </button>
-              )
-            )}
-            
-            <button onClick={onClose} className="interactive w-full py-3 rounded-xl border border-white/10 text-sm text-white/50 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all font-mono uppercase tracking-widest">
-              Close Interface
+            </div>
+            <button onClick={handleClose} className="interactive p-2 rounded-xl bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-all hover:rotate-90">
+              <X size={16} />
             </button>
           </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+          {type === "project" && (
+            <div className="flex flex-wrap gap-2 mt-5 relative z-10">
+              {item.tags.map(t => (
+                <span key={t} style={{ color: accent, borderColor: `${accent}40`, background: `${accent}15` }} className="px-2.5 py-1 rounded-md text-xs font-mono border backdrop-blur-sm">{t}</span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="px-5 sm:px-6 pb-2 space-y-5">
+          {type === "project" && item.demo && !item.image && (
+            <div className="rounded-xl overflow-hidden border border-white/10 relative group" style={{ height: 200 }}>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 pointer-events-none" />
+              <iframe
+                src={item.demo}
+                title={item.title}
+                className="w-full h-full"
+                style={{ pointerEvents: "none", transform: "scale(0.7)", transformOrigin: "top left", width: "142%", height: "142%" }}
+              />
+            </div>
+          )}
+
+          <p className="text-white/70 text-sm leading-relaxed font-sans">{type === "project" ? item.longDesc : `${item.school} | ${item.period}`}</p>
+
+          {type === "project" && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Activity size={14} style={{ color: accent }} />
+                <p className="text-xs font-mono text-white/50 uppercase tracking-widest">System Capabilities</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {item.highlights.map((h, i) => (
+                  <div key={i} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-white/80 hover:bg-white/[0.06] transition-colors">
+                    <Hexagon size={12} style={{ color: accent }} />
+                    {h}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="p-5 sm:p-6 pt-6 space-y-3">
+          {type === "project" && (
+            item.demo ? (
+              <a
+                href={item.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="interactive w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                style={{ background: `linear-gradient(135deg, ${accent}, #000)`, color: "#fff", border: `1px solid ${accent}` }}
+              >
+                <Rocket size={16} />
+                LAUNCH LIVE DEMO
+              </a>
+            ) : (
+              <button
+                disabled
+                className="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 cursor-not-allowed border border-white/10 bg-white/[0.02] text-white/30"
+              >
+                <Shield size={16} />
+                INTERNAL SYSTEM (NO PUBLIC DEMO)
+              </button>
+            )
+          )}
+          
+          <button onClick={handleClose} className="interactive w-full py-3 rounded-xl border border-white/10 text-sm text-white/50 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all font-mono uppercase tracking-widest">
+            Close Interface
+          </button>
+        </div>
+      </div>
+    </div>
   );
+}
+
+// SCROLL ANIMATION HOOK
+function useScrollAnimation(ref, animationOptions) {
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(entry.target, animationOptions);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref, animationOptions]);
 }
 
 // ─── SECTION ──────────────────────────────────────────────────────────────────
 
 function Section({ id, children }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  useScrollAnimation(ref, {
+    translateY: [60, 0],
+    opacity: [0, 1],
+    duration: 800,
+    easing: 'easeOutQuart'
+  });
+
   return (
-    <motion.section id={id} ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="py-20 sm:py-32 px-4 max-w-6xl mx-auto relative z-10"
-    >
+    <section id={id} ref={ref} className="py-20 sm:py-32 px-4 max-w-6xl mx-auto relative z-10 opacity-0">
       {children}
-    </motion.section>
+    </section>
   );
 }
 
@@ -395,10 +472,18 @@ function SectionLabel({ icon: Icon, label, accent = "#00f0ff" }) {
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef(null);
   
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", fn);
+    
+    animate(navRef.current, {
+      translateY: [-100, 0],
+      duration: 1000,
+      easing: 'easeOutElastic(1, .8)'
+    });
+    
     return () => window.removeEventListener("scroll", fn);
   }, []);
   
@@ -406,12 +491,10 @@ function Navbar() {
 
   return (
     <>
-      <motion.nav
+      <nav
+        ref={navRef}
         className="fixed top-0 left-0 right-0 z-40 transition-all duration-500"
         style={scrolled ? { background: "rgba(10,10,15,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(0,240,255,0.1)" } : { padding: "10px 0" }}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <div className="max-w-6xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 interactive cursor-none" onClick={() => window.scrollTo(0, 0)}>
@@ -423,7 +506,7 @@ function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="font-black text-sm tracking-widest uppercase text-white leading-none">Luthfi.</span>
-              <span className="font-mono text-[10px] text-[#00f0ff] tracking-widest">SYS_ONLINE</span>
+              <span className="font-mono text-[10px] text-[#00f0ff] tracking-widest">ONLINE</span>
             </div>
           </div>
           
@@ -443,40 +526,30 @@ function Navbar() {
             
             <button onClick={() => setMenuOpen(v => !v)} className="interactive md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-white">
               <div className="space-y-1.5">
-                <motion.div className="w-5 h-0.5 bg-white rounded" animate={menuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }} />
-                <motion.div className="w-5 h-0.5 bg-white rounded" animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} />
-                <motion.div className="w-5 h-0.5 bg-white rounded" animate={menuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }} />
+                <div className="w-5 h-0.5 bg-white rounded transition-transform" style={{ transform: menuOpen ? 'rotate(45deg) translateY(8px)' : 'none' }} />
+                <div className="w-5 h-0.5 bg-white rounded transition-opacity" style={{ opacity: menuOpen ? 0 : 1 }} />
+                <div className="w-5 h-0.5 bg-white rounded transition-transform" style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-8px)' : 'none' }} />
               </div>
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className="fixed inset-0 z-30 md:hidden flex items-center justify-center"
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }} 
-            animate={{ opacity: 1, backdropFilter: "blur(20px)" }} 
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-          >
-            <div className="absolute inset-0 bg-[#0a0a0f]/90" onClick={() => setMenuOpen(false)} />
-            <motion.div className="relative z-10 w-full max-w-xs flex flex-col gap-6 p-6">
-              {["experience", "projects", "skills", "education", "contact"].map((s, i) => (
-                <motion.button
-                  key={s} onClick={() => scroll(s)}
-                  className="interactive text-center text-2xl font-black uppercase tracking-widest text-white/50 hover:text-[#00f0ff] transition-colors"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  {s}
-                </motion.button>
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {menuOpen && (
+        <div className="fixed inset-0 z-30 md:hidden flex items-center justify-center">
+          <div className="absolute inset-0 bg-[#0a0a0f]/90 backdrop-blur-md" onClick={() => setMenuOpen(false)} />
+          <div className="relative z-10 w-full max-w-xs flex flex-col gap-6 p-6">
+            {["experience", "projects", "skills", "education", "contact"].map((s, i) => (
+              <button
+                key={s} onClick={() => scroll(s)}
+                className="interactive text-center text-2xl font-black uppercase tracking-widest text-white/50 hover:text-[#00f0ff] transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -484,35 +557,45 @@ function Navbar() {
 // ─── CYBER BACKGROUND ─────────────────────────────────────────────────────────
 
 function CyberBackground() {
+  const bgRef = useRef(null);
+  
+  useEffect(() => {
+    animate('.bg-orb-1', {
+      translateX: [0, 50, 0],
+      translateY: [0, -50, 0],
+      duration: 20000,
+      loop: true,
+      easing: 'linear'
+    });
+    animate('.bg-orb-2', {
+      translateX: [0, -50, 0],
+      translateY: [0, 50, 0],
+      duration: 15000,
+      loop: true,
+      easing: 'linear'
+    });
+    animate('.bg-orb-3', {
+      scale: [1, 1.2, 1],
+      duration: 10000,
+      loop: true,
+      easing: 'easeInOutSine'
+    });
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#06080e]">
-      {/* Dynamic Grid */}
+    <div ref={bgRef} className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#06080e]">
       <div className="absolute inset-0 opacity-20"
         style={{
           backgroundImage: "linear-gradient(rgba(0, 240, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.2) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
           transform: "perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px)",
         }} />
-      
-      {/* Glowing Orbs */}
-      <motion.div
-        className="absolute rounded-full mix-blend-screen"
-        style={{ width: 800, height: 800, top: "-20%", left: "-10%", background: "radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 70%)", filter: "blur(60px)" }}
-        animate={{ x: [0, 50, 0], y: [0, -50, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.div
-        className="absolute rounded-full mix-blend-screen"
-        style={{ width: 600, height: 600, bottom: "-10%", right: "-10%", background: "radial-gradient(circle, rgba(112,0,255,0.08) 0%, transparent 70%)", filter: "blur(60px)" }}
-        animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.div
-        className="absolute rounded-full mix-blend-screen"
-        style={{ width: 500, height: 500, top: "40%", left: "40%", background: "radial-gradient(circle, rgba(255,0,60,0.03) 0%, transparent 70%)", filter: "blur(60px)" }}
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
+      <div className="bg-orb-1 absolute rounded-full mix-blend-screen"
+        style={{ width: 800, height: 800, top: "-20%", left: "-10%", background: "radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 70%)", filter: "blur(60px)" }} />
+      <div className="bg-orb-2 absolute rounded-full mix-blend-screen"
+        style={{ width: 600, height: 600, bottom: "-10%", right: "-10%", background: "radial-gradient(circle, rgba(112,0,255,0.08) 0%, transparent 70%)", filter: "blur(60px)" }} />
+      <div className="bg-orb-3 absolute rounded-full mix-blend-screen"
+        style={{ width: 500, height: 500, top: "40%", left: "40%", background: "radial-gradient(circle, rgba(255,0,60,0.03) 0%, transparent 70%)", filter: "blur(60px)" }} />
     </div>
   );
 }
@@ -522,20 +605,34 @@ function CyberBackground() {
 function Hero() {
   const typed = useTyping(["Software Engineer", "AI & Computer Vision Enthusiast", "Full-Stack Developer", "Industrial Digitalizer"]);
   const scroll = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    animate('.hero-element', {
+      translateY: [30, 0],
+      opacity: [0, 1],
+      delay: stagger(200, { start: 500 }),
+      easing: 'easeOutQuart'
+    });
+    
+    animate('.scroll-arrow', {
+      translateY: [0, 8, 0],
+      loop: true,
+      duration: 1500,
+      easing: 'easeInOutSine'
+    });
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 text-center z-10 pt-20">
+    <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center px-4 text-center z-10 pt-20">
       <div className="relative max-w-4xl w-full flex flex-col items-center">
         
-        <motion.div
-          className="inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-10 border border-[#00f0ff]/30 bg-[#00f0ff]/5 backdrop-blur-md"
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
-        >
-          <motion.div className="w-2 h-2 bg-[#00f0ff] rounded-sm" animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
-          <span className="text-[#00f0ff]">System Active // Ready for Deploy</span>
-        </motion.div>
+        <div className="hero-element opacity-0 inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-10 border border-[#00f0ff]/30 bg-[#00f0ff]/5 backdrop-blur-md">
+          <div className="w-2 h-2 bg-[#00f0ff] rounded-sm animate-pulse" />
+          <span className="text-[#00f0ff]">Active // Ready for Deploy</span>
+        </div>
 
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, type: "spring", stiffness: 200 }}>
+        <div className="hero-element opacity-0">
           <h1 className="font-black tracking-tighter leading-none text-white text-5xl sm:text-7xl md:text-8xl mb-2 font-sans uppercase">
             Luthfi
           </h1>
@@ -546,23 +643,19 @@ function Hero() {
             </span>
           </h1>
           <p className="text-white/40 text-lg sm:text-2xl font-light tracking-[0.5em] uppercase mb-12 font-sans">Naufal</p>
-        </motion.div>
+        </div>
 
-        <motion.div className="h-10 flex items-center justify-center mb-8 px-6 py-2 border-l-2 border-r-2 border-[#00f0ff]/50 bg-black/20"
-          initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: "auto" }} transition={{ delay: 0.5, duration: 0.8 }}>
+        <div className="hero-element opacity-0 h-10 flex items-center justify-center mb-8 px-6 py-2 border-l-2 border-r-2 border-[#00f0ff]/50 bg-black/20">
           <span className="text-sm sm:text-xl font-mono text-white/90">{typed}</span>
-          <motion.span className="ml-2 w-3 h-5 inline-block bg-[#00f0ff]"
-            animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity }} />
-        </motion.div>
+          <span className="ml-2 w-3 h-5 inline-block bg-[#00f0ff] animate-pulse" />
+        </div>
 
-        <motion.p className="text-white/50 text-sm sm:text-base font-mono mb-12 leading-relaxed max-w-2xl mx-auto"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}>
+        <p className="hero-element opacity-0 text-white/50 text-sm sm:text-base font-mono mb-12 leading-relaxed max-w-2xl mx-auto">
           Informatics Engineering Student at UBP Karawang (GPA: 3.92).<br/>
           Specializing in AI Integration, Computer Vision QA Systems, and Industrial Web Applications.
-        </motion.p>
+        </p>
 
-        <motion.div className="flex flex-col sm:flex-row gap-6 justify-center w-full sm:w-auto"
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
+        <div className="hero-element opacity-0 flex flex-col sm:flex-row gap-6 justify-center w-full sm:w-auto">
           <button
             onClick={() => scroll("projects")}
             className="interactive group relative flex items-center justify-center gap-3 px-8 py-4 bg-transparent border-2 border-[#00f0ff] text-[#00f0ff] font-black uppercase tracking-widest text-sm overflow-hidden"
@@ -579,11 +672,10 @@ function Hero() {
             <Mail size={16} className="text-[#7000ff]" />
             Establish Link
           </button>
-        </motion.div>
+        </div>
 
         {/* Cyber stats */}
-        <motion.div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mt-20"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}>
+        <div className="hero-element opacity-0 grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mt-20">
           {[
             { v: "3.92", l: "GPA_SCORE", c: "#00f0ff" },
             { v: "70%", l: "ERROR_REDUCED", c: "#ff003c" },
@@ -596,16 +688,15 @@ function Hero() {
               <p className="text-[10px] font-mono text-white/40 tracking-widest uppercase">{stat.l}</p>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
       
-      <motion.div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[#00f0ff]/50 flex flex-col items-center gap-2 cursor-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}>
+      <div className="hero-element opacity-0 absolute bottom-10 left-1/2 -translate-x-1/2 text-[#00f0ff]/50 flex flex-col items-center gap-2 cursor-none">
         <span className="text-[10px] font-mono tracking-widest">SCROLL_DOWN</span>
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+        <div className="scroll-arrow">
           <ChevronDown size={20} />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -613,21 +704,24 @@ function Hero() {
 // ─── EXPERIENCE ───────────────────────────────────────────────────────────────
 
 function Experience() {
+  const listRef = useRef(null);
+  useScrollAnimation(listRef, {
+    translateY: [40, 0],
+    opacity: [0, 1],
+    delay: stagger(150),
+    easing: 'easeOutQuart'
+  });
+
   return (
     <Section id="experience">
       <SectionLabel icon={Activity} label="Experience Logs" accent="#ff003c" />
-      <div className="relative">
+      <div className="relative" ref={listRef}>
         {/* Neon Line */}
         <div className="absolute left-[20px] sm:left-[27px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#ff003c] via-[#7000ff] to-transparent opacity-50" />
         
         <div className="space-y-12">
           {experience.map((exp, i) => (
-            <motion.div key={i} className="relative pl-14 sm:pl-20"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.7, type: "spring" }}>
-              
+            <div key={i} className="relative pl-14 sm:pl-20 opacity-0">
               {/* Glowing Node */}
               <div className="absolute left-[9px] sm:left-[16px] top-6 w-6 h-6 rounded-sm bg-[#0a0a0f] border-2 flex items-center justify-center z-10 rotate-45"
                 style={{ borderColor: exp.accent, boxShadow: `0 0 15px ${exp.accent}60` }}>
@@ -659,7 +753,7 @@ function Experience() {
                   </ul>
                 </div>
               </TiltCard>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -670,16 +764,20 @@ function Experience() {
 // ─── PROJECTS ─────────────────────────────────────────────────────────────────
 
 function Projects({ onOpen }) {
+  const gridRef = useRef(null);
+  useScrollAnimation(gridRef, {
+    scale: [0.95, 1],
+    opacity: [0, 1],
+    delay: stagger(100),
+    easing: 'easeOutQuart'
+  });
+
   return (
     <Section id="projects">
       <SectionLabel icon={Layers} label="Deployed Modules" accent="#00f0ff" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ref={gridRef}>
         {projects.map((proj, i) => (
-          <motion.div key={proj.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.6 }}>
+          <div key={proj.id} className="opacity-0">
             <TiltCard onClick={() => onOpen(proj, "project")}
               className="h-full group">
               <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden flex flex-col transition-colors group-hover:border-white/30"
@@ -714,7 +812,7 @@ function Projects({ onOpen }) {
                 </div>
               </div>
             </TiltCard>
-          </motion.div>
+          </div>
         ))}
       </div>
     </Section>
@@ -724,17 +822,20 @@ function Projects({ onOpen }) {
 // ─── SKILLS ───────────────────────────────────────────────────────────────────
 
 function Skills() {
+  const skillsRef = useRef(null);
+  useScrollAnimation(skillsRef, {
+    translateY: [30, 0],
+    opacity: [0, 1],
+    delay: stagger(150),
+    easing: 'easeOutQuad'
+  });
+
   return (
     <Section id="skills">
       <SectionLabel icon={Cpu} label="System Capabilities" accent="#7000ff" />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6" ref={skillsRef}>
         {skills.map((group, i) => (
-          <motion.div key={group.label}
-            className="p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden group"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.15 }}>
+          <div key={group.label} className="opacity-0 p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden group">
             
             <div className="absolute bottom-0 left-0 w-full h-1 transition-all duration-300 opacity-50 group-hover:opacity-100" style={{ background: group.accent }} />
 
@@ -747,18 +848,16 @@ function Skills() {
             
             <div className="flex flex-wrap gap-2.5">
               {group.items.map((item, j) => (
-                <motion.span key={item}
+                <span key={item}
                   className="interactive px-3 py-1.5 rounded-sm text-xs font-mono border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all cursor-none uppercase tracking-wide"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 + j * 0.05 }}
-                  whileHover={{ borderColor: group.accent, backgroundColor: `${group.accent}10`, color: group.accent, y: -2 }}>
+                  style={{
+                    ':hover': { borderColor: group.accent, backgroundColor: `${group.accent}10`, color: group.accent, transform: 'translateY(-2px)' }
+                  }}>
                   {item}
-                </motion.span>
+                </span>
               ))}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </Section>
@@ -768,16 +867,20 @@ function Skills() {
 // ─── EDUCATION ───────────────────────────────────────────────────────────
 
 function Education({ onOpen }) {
+  const eduRef = useRef(null);
+  useScrollAnimation(eduRef, {
+    scale: [0.95, 1],
+    opacity: [0, 1],
+    delay: stagger(150),
+    easing: 'easeOutQuad'
+  });
+
   return (
     <Section id="education">
       <SectionLabel icon={Brain} label="Education & Core Data" accent="#00f0ff" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6" ref={eduRef}>
         {education.map((edu, i) => (
-          <motion.div key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}>
+          <div key={i} className="opacity-0">
             <TiltCard onClick={() => onOpen(edu, "edu")}
               className="h-full group">
               <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden transition-all group-hover:border-white/30">
@@ -795,7 +898,7 @@ function Education({ onOpen }) {
                 </div>
               </div>
             </TiltCard>
-          </motion.div>
+          </div>
         ))}
       </div>
     </Section>
@@ -805,13 +908,21 @@ function Education({ onOpen }) {
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 
 function Footer() {
+  const footRef = useRef(null);
+  useScrollAnimation(footRef, {
+    translateY: [30, 0],
+    opacity: [0, 1],
+    duration: 800,
+    easing: 'easeOutQuart'
+  });
+
   return (
     <footer id="contact" className="py-24 px-4 relative overflow-hidden bg-black/50 border-t border-white/10 mt-20">
       <div className="absolute inset-0 pointer-events-none opacity-20"
         style={{ backgroundImage: "radial-gradient(circle at center, #00f0ff 0%, transparent 50%)", backgroundSize: "100% 100%" }} />
       
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+      <div className="max-w-4xl mx-auto text-center relative z-10" ref={footRef}>
+        <div className="opacity-0">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-8 border border-[#7000ff]/40 bg-[#7000ff]/10 text-[#7000ff]">
             <Sparkles size={14} className="animate-pulse" />
             Initialization Complete
@@ -827,14 +938,12 @@ function Footer() {
               { href: "https://www.linkedin.com/in/luthfirafanandanaufal/", icon: Linkedin, label: "LINKEDIN_NETWORK", accent: "#00f0ff" },
               { href: "mailto:luthfi.rafanandanaufal@gmail.com", icon: Mail, label: "SECURE_EMAIL", accent: "#ff003c" },
             ].map(({ href, icon: Icon, label, accent }) => (
-              <motion.a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                className="interactive flex items-center justify-center gap-3 px-6 py-4 rounded-sm text-xs font-bold font-sans uppercase tracking-widest border border-white/10 bg-white/5 transition-all overflow-hidden relative group"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}>
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                className="interactive flex items-center justify-center gap-3 px-6 py-4 rounded-sm text-xs font-bold font-sans uppercase tracking-widest border border-white/10 bg-white/5 transition-all overflow-hidden relative group hover:scale-[1.02] active:scale-[0.98]">
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity" style={{ background: accent }} />
                 <Icon size={16} className="relative z-10" style={{ color: accent }} />
                 <span className="relative z-10 text-white group-hover:text-white transition-colors">{label}</span>
-              </motion.a>
+              </a>
             ))}
           </div>
           
@@ -842,10 +951,10 @@ function Footer() {
             <p className="text-white/30 text-[10px] font-mono tracking-widest uppercase">© 2026 LUTHFI RAFANANDA NAUFAL. ALL RIGHTS RESERVED.</p>
             <div className="flex items-center gap-2 text-[10px] font-mono text-white/30 tracking-widest uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" />
-              SYSTEM_SECURE
+              SECURE
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );
