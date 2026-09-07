@@ -560,21 +560,21 @@ function CyberBackground() {
   const bgRef = useRef(null);
   
   useEffect(() => {
-    animate('.bg-orb-1', {
+    animate(document.querySelectorAll('.bg-orb-1'), {
       translateX: [0, 50, 0],
       translateY: [0, -50, 0],
       duration: 20000,
       loop: true,
       easing: 'linear'
     });
-    animate('.bg-orb-2', {
+    animate(document.querySelectorAll('.bg-orb-2'), {
       translateX: [0, -50, 0],
       translateY: [0, 50, 0],
       duration: 15000,
       loop: true,
       easing: 'linear'
     });
-    animate('.bg-orb-3', {
+    animate(document.querySelectorAll('.bg-orb-3'), {
       scale: [1, 1.2, 1],
       duration: 10000,
       loop: true,
@@ -608,14 +608,14 @@ function Hero() {
   const heroRef = useRef(null);
 
   useEffect(() => {
-    animate('.hero-element', {
+    animate(document.querySelectorAll('.hero-element'), {
       translateY: [30, 0],
       opacity: [0, 1],
       delay: stagger(200, { start: 500 }),
       easing: 'easeOutQuart'
     });
     
-    animate('.scroll-arrow', {
+    animate(document.querySelectorAll('.scroll-arrow'), {
       translateY: [0, 8, 0],
       loop: true,
       duration: 1500,
