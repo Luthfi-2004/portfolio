@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { animate, stagger } from "animejs";
 import {
   GitBranch, Linkedin, Mail, X, ExternalLink, ChevronDown,
-  Cpu, Code2, Award, Briefcase, Sparkles, ArrowRight,
+  Cpu, Code2, Award, Briefcase, ArrowRight,
   Terminal, Zap, Brain, Server, Shield, Layers, Database,
   Eye, Activity, Fingerprint, MonitorSmartphone, Wifi, Rocket, Hexagon
 } from "lucide-react";
@@ -369,18 +369,11 @@ function useScrollAnimation(ref, animationOptions, childSelector = null) {
 }
 
 // ─── SECTION ──────────────────────────────────────────────────────────────────
-
+// Blanket Fade Up removed — each section's children animate individually with
+// their own stagger, so a uniform wrapper animation was redundant noise (R-19).
 function Section({ id, children }) {
-  const ref = useRef(null);
-  useScrollAnimation(ref, {
-    translateY: [60, 0],
-    opacity: [0, 1],
-    duration: 800,
-    easing: 'easeOutQuart'
-  });
-
   return (
-    <section id={id} ref={ref} className="py-20 sm:py-32 px-4 max-w-6xl mx-auto relative z-10 opacity-0">
+    <section id={id} className="py-20 sm:py-32 px-4 max-w-6xl mx-auto relative z-10">
       {children}
     </section>
   );
@@ -390,8 +383,8 @@ function SectionLabel({ icon: Icon, label, accent = "#00f0ff" }) {
   return (
     <div className="flex items-center gap-4 mb-12 sm:mb-16">
       <div className="relative">
-        <div className="absolute inset-0 blur-md opacity-50 rounded-lg" style={{ background: accent }} />
-        <div className="relative p-3 rounded-xl bg-[#0a0a0f] border" style={{ borderColor: `${accent}40` }}>
+        {/* icon glow removed — accent color alone marks the section; glow capped to modal (R-13) */}
+        <div className="p-3 rounded-xl bg-[#0a0a0f] border" style={{ borderColor: `${accent}40` }}>
           <Icon size={18} style={{ color: accent }} />
         </div>
       </div>
@@ -436,14 +429,14 @@ function Navbar() {
         <div className="max-w-6xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 interactive" onClick={() => window.scrollTo(0, 0)}>
             <div className="relative flex items-center justify-center w-10 h-10">
-              <div className="absolute inset-0 bg-[#00f0ff] blur-md opacity-40 rounded-full animate-pulse" />
+              {/* logo glow removed — single accent kept on hero name gradient only (R-13) */}
               <div className="relative w-full h-full bg-[#0a0a0f] border border-[#00f0ff]/50 rounded-xl flex items-center justify-center transform rotate-45 hover:rotate-90 transition-transform duration-500">
                 <Terminal size={16} className="text-[#00f0ff] -rotate-45" />
               </div>
             </div>
             <div className="flex flex-col">
               <span className="font-black text-sm tracking-widest uppercase text-white leading-none">Luthfi.</span>
-              <span className="font-mono text-[10px] text-[#00f0ff] tracking-widest">ONLINE</span>
+              {/* "ONLINE" removed — decorative status indicator with no functional meaning (R-26) */}
             </div>
           </div>
           
@@ -521,12 +514,7 @@ function CyberBackground() {
 
   return (
     <div ref={bgRef} className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#06080e]">
-      <div className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: "linear-gradient(rgba(0, 240, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.2) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-          transform: "perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px)",
-        }} />
+      {/* perspective grid removed — blueprint pattern without stated identity purpose (R-07) */}
       <div className="bg-orb-1 absolute rounded-full mix-blend-screen"
         style={{ width: 800, height: 800, top: "-20%", left: "-10%", background: "radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 70%)", filter: "blur(60px)" }} />
       <div className="bg-orb-2 absolute rounded-full mix-blend-screen"
@@ -609,14 +597,14 @@ function Hero() {
         </div>
 
         {/* Cyber stats */}
-        <div className="hero-element opacity-0 grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mt-20">
+        {/* "100% DEDICATION" removed — not a verifiable metric, no real source (R-17) */}
+        <div className="hero-element opacity-0 grid grid-cols-3 gap-4 w-full mt-20">
           {[
             { v: "3.92", l: "GPA_SCORE", c: "#00f0ff" },
             { v: "70%", l: "ERROR_REDUCED", c: "#ff003c" },
             { v: "1st", l: "TECHNOVISION", c: "#7000ff" },
-            { v: "100%", l: "DEDICATION", c: "#00f0ff" }
           ].map((stat, i) => (
-            <div key={i} className="p-4 border border-white/5 bg-black/40 backdrop-blur-sm relative overflow-hidden group">
+            <div key={i} className="p-4 border border-white/5 bg-black/60 relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1" style={{ background: stat.c, opacity: 0.5 }} />
               <p className="text-2xl sm:text-3xl font-black mb-1 font-sans" style={{ color: stat.c }}>{stat.v}</p>
               <p className="text-[10px] font-mono text-white/40 tracking-widest uppercase">{stat.l}</p>
@@ -656,14 +644,15 @@ function Experience() {
         <div className="space-y-12">
           {experience.map((exp, i) => (
             <div key={i} className="stagger-item relative pl-14 sm:pl-20 opacity-0">
-              {/* Glowing Node */}
+              {/* node glow removed — accent border color is sufficient timeline marker (R-13) */}
               <div className="absolute left-[9px] sm:left-[16px] top-6 w-6 h-6 rounded-sm bg-[#0a0a0f] border-2 flex items-center justify-center z-10 rotate-45"
-                style={{ borderColor: exp.accent, boxShadow: `0 0 15px ${exp.accent}60` }}>
+                style={{ borderColor: exp.accent }}>
                 <div className="-rotate-45" style={{ color: exp.accent }}>{exp.icon}</div>
               </div>
 
               <TiltCard className="p-1">
-                <div className="p-6 sm:p-8 rounded-lg border border-white/10 bg-[#0a0a0f]/80 backdrop-blur-md relative overflow-hidden group">
+                {/* backdrop-blur removed from cards — blur capped to modal overlay only (R-10) */}
+                <div className="p-6 sm:p-8 rounded-lg border border-white/10 bg-[#0a0a0f]/95 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 opacity-10 bg-gradient-to-bl blur-3xl pointer-events-none" style={{ backgroundImage: `linear-gradient(to bottom left, ${exp.accent}, transparent)` }} />
                   
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/5 pb-4">
@@ -714,17 +703,15 @@ function Projects({ onOpen }) {
           <div key={proj.id} className="stagger-item opacity-0">
             <TiltCard onClick={() => onOpen(proj, "project")}
               className="h-full group">
-              <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden flex flex-col transition-colors group-hover:border-white/30"
+              {/* inner grid and backdrop-blur removed — grid without identity purpose (R-07), blur capped to modal (R-10) */}
+              <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/95 relative overflow-hidden flex flex-col transition-colors group-hover:border-white/30"
                 style={{ boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.02)` }}>
-                
-                {/* Cyber Grid Bg inside card */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
                 
                 <div className="absolute -right-10 -top-10 w-40 h-40 opacity-20 blur-3xl rounded-full transition-opacity group-hover:opacity-40" style={{ background: proj.accent }} />
 
                 <div className="relative z-10" style={{ transform: "translateZ(30px)" }}>
                   <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 flex items-center justify-center text-2xl bg-black border rounded-lg" style={{ borderColor: `${proj.accent}50`, color: proj.accent, boxShadow: `0 0 15px ${proj.accent}30` }}>
+                    <div className="w-12 h-12 flex items-center justify-center text-2xl bg-black border rounded-lg" style={{ borderColor: `${proj.accent}50`, color: proj.accent }}>
                       {proj.emoji}
                     </div>
                     <div className="p-2 bg-white/5 rounded-full text-white/30 group-hover:text-white transition-colors group-hover:rotate-45 duration-300">
@@ -769,12 +756,12 @@ function Skills() {
       <SectionLabel icon={Cpu} label="System Capabilities" accent="#7000ff" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6" ref={skillsRef}>
         {skills.map((group, i) => (
-          <div key={group.label} className="stagger-item opacity-0 p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden group">
-            
+          <div key={group.label} className="stagger-item opacity-0 p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/95 relative overflow-hidden group">
+            {/* backdrop-blur removed from skill cards — capped to modal only (R-10) */}
             <div className="absolute bottom-0 left-0 w-full h-1 transition-all duration-300 opacity-50 group-hover:opacity-100" style={{ background: group.accent }} />
 
             <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 rounded-lg border bg-black" style={{ borderColor: `${group.accent}40`, boxShadow: `0 0 20px ${group.accent}20` }}>
+              <div className="p-3 rounded-lg border bg-black" style={{ borderColor: `${group.accent}40` }}>
                 <group.icon size={20} style={{ color: group.accent }} />
               </div>
               <span className="text-sm font-black text-white uppercase tracking-widest font-sans">{group.label}</span>
@@ -817,11 +804,12 @@ function Education({ onOpen }) {
           <div key={i} className="stagger-item opacity-0">
             <TiltCard onClick={() => onOpen(edu, "edu")}
               className="h-full group">
-              <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/60 backdrop-blur-md relative overflow-hidden transition-all group-hover:border-white/30">
+              {/* backdrop-blur removed from education cards — capped to modal only (R-10) */}
+              <div className="h-full p-6 sm:p-8 rounded-xl border border-white/10 bg-[#0a0a0f]/95 relative overflow-hidden transition-all group-hover:border-white/30">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl blur-3xl opacity-10 group-hover:opacity-30 transition-opacity" style={{ from: edu.accent, to: "transparent" }} />
                 <div className="relative z-10" style={{ transform: "translateZ(20px)" }}>
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-6 border bg-black"
-                    style={{ borderColor: `${edu.accent}50`, color: edu.accent, boxShadow: `0 0 15px ${edu.accent}30` }}>
+                    style={{ borderColor: `${edu.accent}50`, color: edu.accent }}>
                     {edu.icon}
                   </div>
                   <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-2">{edu.school}</p>
@@ -857,10 +845,7 @@ function Footer() {
       
       <div className="max-w-4xl mx-auto text-center relative z-10 opacity-0" ref={footRef}>
         <div>
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-sm text-xs font-mono tracking-widest uppercase mb-8 border border-[#7000ff]/40 bg-[#7000ff]/10 text-[#7000ff]">
-            <Sparkles size={14} className="animate-pulse" />
-            Initialization Complete
-          </div>
+          {/* "Initialization Complete" badge removed — Sparkles icon + glow capsule with no real status (R-04, R-09) */}
           <h2 className="text-4xl sm:text-6xl font-black text-white mb-6 tracking-tighter uppercase font-sans">Establish Connection</h2>
           <p className="text-white/40 text-sm sm:text-base font-mono mb-12 max-w-xl mx-auto leading-relaxed">
             Ready to integrate into complex digitalization projects involving information systems, IoT, and AI.
@@ -881,12 +866,9 @@ function Footer() {
             ))}
           </div>
           
-          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* "SECURE" badge removed — fabricated trust claim with no verifiable basis (R-36) */}
+          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <p className="text-white/30 text-[10px] font-mono tracking-widest uppercase">© 2026 LUTHFI RAFANANDA NAUFAL. ALL RIGHTS RESERVED.</p>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-white/30 tracking-widest uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" />
-              SECURE
-            </div>
           </div>
         </div>
       </div>
@@ -912,8 +894,8 @@ export default function App() {
         ::-webkit-scrollbar-track { background: #06080e; }
         ::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.3); border-radius: 0; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(0,240,255,0.6); }
-        h1, h2, h3 { font-family: 'Inter', sans-serif; }
-        p, span, div { font-family: 'JetBrains Mono', monospace; }
+        h1, h2, h3, p { font-family: 'Inter', sans-serif; }
+        /* JetBrains Mono applied via .font-mono utility only on code/label elements (R-06) */
         ::selection { background: rgba(0,240,255,0.3); color: white; }
       `}</style>
       
